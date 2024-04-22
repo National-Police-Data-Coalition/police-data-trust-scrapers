@@ -1,0 +1,5 @@
+[tool.coverage.report]
+include_namespace_packages = true
+
+[tool.bandit]
+exclude_dirs = ["tests"]
