@@ -43,12 +43,13 @@ class OfficerSpider(CrawlSpider):
             count_parsed = parse_string_to_number(count)
             if count_parsed is not None:
                 complaints.append({"name": i, "count": count_parsed})
+
         for disp in response.css(".dispositions").css(".disposition"):
             count = disp.css(".count::text").get()
             count_parsed = parse_string_to_number(count)
             if count_parsed is not None:
                 name = disp.css(".name::text").get()
-                complaints.append({"name": name, "count": count})
+                complaints.append({"name": name, "count": count_parsed})
         return complaints
 
     def parse(self, response):
