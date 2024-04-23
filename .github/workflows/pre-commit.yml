@@ -1,4 +1,4 @@
-name: pre-commit
+name: pre-commit & test coverage
 
 on:
   pull_request:
@@ -19,5 +19,7 @@ jobs:
         cache: pip
         cache-dependency-path: "**/requirements*.txt"
     - name: Install dependencies
-      run: pip install -r requirements_dev.txt  && pwd && ls -al $$ echo $PYTHONPATH
+      run: pip install -r requirements_dev.txt
     - uses: pre-commit/action@v3.0.1
+    - name: Check coverage
+      run: pytest --cov=scrapers
