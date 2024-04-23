@@ -9,7 +9,7 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     env:
-      - PYTHONPPATH: /home/runner/work/police-data-trust-scrapers/police-data-trust-scrapers:$PYTHONPATH
+      - PYTHONPPATH: /home/runner/work/police-data-trust-scrapers/police-data-trust-scrapers
     steps:
     - uses: actions/checkout@v4
     - name: Setup python
