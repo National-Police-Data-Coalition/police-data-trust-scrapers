@@ -1,0 +1,23 @@
+name: pre-commit & test coverage
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  pre-commit-and-coverage:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: /home/runner/work/police-data-trust-scrapers/police-data-trust-scrapers:$PYTHONPATH
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12.2"
+    - name: Install dependencies
+      run: pip install -r requirements_dev.txt
+    - uses: pre-commit/action@v3.0.1
+    - name: Check coverage
+      run: pytest --cov=scrapers

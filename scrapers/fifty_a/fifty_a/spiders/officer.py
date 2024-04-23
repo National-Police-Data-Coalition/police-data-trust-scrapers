@@ -18,19 +18,12 @@ class OfficerSpider(CrawlSpider):
     )
 
     def parse_officer(self, response):
-        """
-        badge = response.css('.badge::text').get()
-        description = response.xpath("//span[contains(@class, 'desc')]/text()").get()
-        """
-
-        complaints = self.parse_complaints(response)
-
         officer = OfficerItem(
             url=response.url,
             name=response.css("h1::text").get(),
             badge=response.css(".badge::text").get(),
             description=response.xpath("//span[contains(@class, 'desc')]/text()").get(),
-            complaints=complaints,
+            complaints=self.parse_complaints(response),
         )
 
         yield officer
@@ -51,6 +44,3 @@ class OfficerSpider(CrawlSpider):
                 name = disp.css(".name::text").get()
                 complaints.append({"name": name, "count": count_parsed})
         return complaints
-
-    def parse(self, response):
-        pass

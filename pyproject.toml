@@ -1,0 +1,10 @@
+[tool.coverage.run]
+omit = ["settings.py"]
+
+[tool.coverage.report]
+include_namespace_packages = true
+skip_covered = true
+show_missing = true
+
+[tool.bandit]
+exclude_dirs = ["tests"]
