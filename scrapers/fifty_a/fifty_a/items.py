@@ -16,5 +16,7 @@ class OfficerItem(BaseItem):
     url: str
     name: str
     badge: str
-    description: str
+    race: str
+    gender: str
     complaints: List[dict]
+    age: int
