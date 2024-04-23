@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Tuple
 
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
@@ -18,15 +18,39 @@ class OfficerSpider(CrawlSpider):
     )
 
     def parse_officer(self, response):
+        race, gender = self.parse_race_and_gender(response)
         officer = OfficerItem(
             url=response.url,
             name=response.css("h1::text").get(),
             badge=response.css(".badge::text").get(),
-            description=response.xpath("//span[contains(@class, 'desc')]/text()").get(),
+            race=race,
+            gender=gender,
             complaints=self.parse_complaints(response),
+            age=parse_string_to_number(response.css(".age::text").get()),
         )
 
         yield officer
+
+    @staticmethod
+    def parse_race_and_gender(response) -> Tuple[Optional[str], Optional[str]]:
+        race = None
+        gender = None
+
+        description_text = response.xpath(
+            "//span[contains(@class, 'desc')]/text()"
+        ).get("")
+        race_and_gender = description_text.split(",")[0]
+
+        splits = [i.strip() for i in race_and_gender.split()]
+        if len(splits) == 0:
+            return race, gender
+        elif len(splits) == 1:
+            race = splits[0]
+        else:
+            race = " ".join(splits[:-1])
+            gender = splits[-1]
+
+        return race, gender
 
     @staticmethod
     def parse_complaints(response) -> List[Optional[Dict[str, Any]]]:
