@@ -9,7 +9,7 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     env:
-      - PYTHONPPATH: /home/runner/work/police-data-trust-scrapers/police-data-trust-scrapers
+      PYTHONPATH: /home/runner/work/police-data-trust-scrapers/police-data-trust-scrapers:$PYTHONPATH
     steps:
     - uses: actions/checkout@v4
     - name: Setup python
@@ -19,5 +19,5 @@ jobs:
         cache: pip
         cache-dependency-path: "**/requirements*.txt"
     - name: Install dependencies
-      run: pip install -r requirements_dev.txt  && pwd && ls -al $$ echo $PYTHONPPATH
+      run: pip install -r requirements_dev.txt  && pwd && ls -al $$ echo $PYTHONPATH
     - uses: pre-commit/action@v3.0.1
