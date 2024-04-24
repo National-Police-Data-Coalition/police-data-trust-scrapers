@@ -40,7 +40,7 @@ class TestOfficer:
         assert officer.race == "Asian"
         assert officer.gender == "Male"
         assert len(officer.complaints) == 8
-        assert officer.age == 37
+        assert officer.age == "37"
 
     @pytest.mark.parametrize(
         "body, race, gender",

@@ -26,7 +26,7 @@ class OfficerSpider(CrawlSpider):
             race=race,
             gender=gender,
             complaints=self.parse_complaints(response),
-            age=parse_string_to_number(response.css(".age::text").get()),
+            age=response.css(".age::text").get(),
         )
 
         yield officer

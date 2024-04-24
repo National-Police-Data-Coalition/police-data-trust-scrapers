@@ -1,9 +1,7 @@
-name: pre-commit & test coverage
+name: Checks
 
 on:
-  pull_request:
   push:
-    branches: [main]
 
 jobs:
   pre-commit-and-coverage:

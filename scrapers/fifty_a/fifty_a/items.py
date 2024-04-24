@@ -19,4 +19,4 @@ class OfficerItem(BaseItem):
     race: str
     gender: str
     complaints: List[dict]
-    age: int
+    age: str
