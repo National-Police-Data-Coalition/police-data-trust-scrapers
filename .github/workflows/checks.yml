@@ -1,7 +1,6 @@
 name: pre-commit & test coverage
 
 on:
-  pull_request:
   push:
 
 jobs:
