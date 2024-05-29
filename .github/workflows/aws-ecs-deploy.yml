@@ -89,7 +89,7 @@ jobs:
           account_id: ${{ secrets.AWS_ACCOUNT_ID }}
           repo: ${{ needs.setup_env.outputs.AWS_APPENV }}
           region: ${{ env.AWS_REGION }}
-          tags: latest,${{ needs.setup_env.outputs.IMAGE_TAG }}
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ needs.setup_env.outputs.AWS_APPENV }}:${{ needs.setup_env.outputs.IMAGE_TAG }}
           dockerfile: ${{ env.DOCKERFILE }}
           path: ${{ env.DOCKER_PATH }}
   deploy:
