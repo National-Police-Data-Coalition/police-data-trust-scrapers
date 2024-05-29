@@ -80,6 +80,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: false
+          load: true
           tags: latest,${{ needs.setup_env.outputs.IMAGE_TAG }}
       - name: Build & Push Image to ECR
         uses: mikeyavorsky/aws-ecr-action@master
