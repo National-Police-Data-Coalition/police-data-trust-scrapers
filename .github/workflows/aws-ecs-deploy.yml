@@ -67,9 +67,10 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+      - name: Login to ECR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -82,17 +83,6 @@ jobs:
           push: false
           load: true
           tags: latest,${{ needs.setup_env.outputs.IMAGE_TAG }}
-      - name: Build & Push Image to ECR
-        uses: mikeyavorsky/aws-ecr-action@master
-        with:
-          access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          account_id: ${{ secrets.AWS_ACCOUNT_ID }}
-          repo: ${{ needs.setup_env.outputs.AWS_APPENV }}
-          region: ${{ env.AWS_REGION }}
-          tags: ${{ steps.login-ecr.outputs.registry }}/${{ needs.setup_env.outputs.AWS_APPENV }}:${{ needs.setup_env.outputs.IMAGE_TAG }}
-          dockerfile: ${{ env.DOCKERFILE }}
-          path: ${{ env.DOCKER_PATH }}
   deploy:
     name: Deploy to AWS ECS
     runs-on: ubuntu-latest
