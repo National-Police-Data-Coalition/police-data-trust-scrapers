@@ -80,8 +80,7 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          push: false
-          load: true
+          push: true
           tags: latest,${{ needs.setup_env.outputs.IMAGE_TAG }}
   deploy:
     name: Deploy to AWS ECS
