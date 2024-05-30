@@ -110,11 +110,11 @@ jobs:
           task-definition: task-def-scraper.json
           container-name: ${{ needs.setup_env.outputs.AWS_APPENV }}
           image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ needs.setup_env.outputs.AWS_APPENV }}:${{ needs.setup_env.outputs.IMAGE_TAG }}
-      - name: Deploy Amazon ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      - name: Run Task on Amazon ECS
+        uses: smitp/amazon-ecs-run-task@v1
         with:
           task-definition: ${{ steps.task-definition.outputs.task-definition }}
-          service: ${{ needs.setup_env.outputs.AWS_APPENV }}
           cluster: infra-prod
-          wait-for-service-stability: false
-          wait-for-minutes: 7 minutes
+          count: 1
+          started-by: github-actions-${{ github.actor }}
+          wait-for-finish: true
