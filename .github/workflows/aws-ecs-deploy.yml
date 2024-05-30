@@ -81,7 +81,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: latest,${{ needs.setup_env.outputs.IMAGE_TAG }}
+          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_APP_NAME }}:latest
   deploy:
     name: Deploy to AWS ECS
     runs-on: ubuntu-latest
