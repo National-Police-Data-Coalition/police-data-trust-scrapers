@@ -100,9 +100,6 @@ jobs:
         id: aws-network-config
         run: |
           aws ecs describe-services --cluster infra-prod --services police-data-trust-backend-dev | jq '.services[0].networkConfiguration' | jq 'del(.awsvpcConfiguration.assignPublicIp)' > network-config-scraper.json
-        with:
-          files: |
-            network-config=network-config-scraper.json
       - name: Pull Task Definition & write to file
         id: aws-task-definition
         run: |
@@ -123,6 +120,6 @@ jobs:
           task-definition: ${{ steps.task-definition.outputs.task-definition }}
           cluster: infra-prod
           count: 1
-          network-configuration: ${{ steps.aws-network-config.network-config }}
+          network-configuration: network-config-scraper.json
           started-by: github-actions-${{ github.actor }}
           wait-for-finish: true
