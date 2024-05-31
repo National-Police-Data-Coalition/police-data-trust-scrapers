@@ -116,5 +116,6 @@ jobs:
           task-definition: ${{ steps.task-definition.outputs.task-definition }}
           cluster: infra-prod
           count: 1
+          networkConfiguration: ${{ secrets.NETWORK_CONFIGURATION }}
           started-by: github-actions-${{ github.actor }}
           wait-for-finish: true
