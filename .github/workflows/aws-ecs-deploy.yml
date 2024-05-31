@@ -121,5 +121,6 @@ jobs:
           cluster: infra-prod
           count: 1
           network-configuration: network-config-scraper.json
+          launch-type: FARGATE
           started-by: github-actions-${{ github.actor }}
           wait-for-finish: true
