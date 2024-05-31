@@ -100,6 +100,9 @@ jobs:
         id: aws-network-config
         run: |
           aws ecs describe-services --cluster infra-prod --services police-data-trust-backend-dev | jq '.services[0] | { networkConfiguration }' | jq 'del(.networkConfiguration.awsvpcConfiguration.assignPublicIp)' > network-config-scraper.json
+        with:
+          files: |
+            network-config=network-config-scraper.json
       - name: Pull Task Definition & write to file
         id: aws-task-definition
         run: |
@@ -107,15 +110,11 @@ jobs:
             --task-definition ${{ needs.setup_env.outputs.AWS_APPENV }} \
             --query taskDefinition | \
             jq 'del(.taskDefinitionArn,.revision,.status,.registeredBy,.registeredAt,.compatibilities,.requiresAttributes)' > task-def-scraper.json
-      - name: Merge Network Config & Task Definition
-        id: merge-network-config-and-task
-        run: |
-          jq -s '.[0] * .[1]' task-def-scraper.json network-config-scraper.json > merged-def-scraper.json
       - name: Interpolate new Docker Image into Task Definition
         id: task-definition
         uses: aws-actions/amazon-ecs-render-task-definition@v1.3.0
         with:
-          task-definition: merged-def-scraper.json
+          task-definition: task-def-scraper.json
           container-name: ${{ needs.setup_env.outputs.AWS_APPENV }}
           image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ needs.setup_env.outputs.AWS_APPENV }}:${{ needs.setup_env.outputs.IMAGE_TAG }}
       - name: Run Task on Amazon ECS
@@ -124,6 +123,6 @@ jobs:
           task-definition: ${{ steps.task-definition.outputs.task-definition }}
           cluster: infra-prod
           count: 1
-          networkConfiguration: ${{ secrets.NETWORK_CONFIGURATION }}
+          network-configuration: ${{ steps.aws-network-config.network-config }}
           started-by: github-actions-${{ github.actor }}
           wait-for-finish: true
