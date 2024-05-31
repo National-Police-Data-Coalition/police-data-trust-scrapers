@@ -99,7 +99,7 @@ jobs:
       - name: Get Network Config & write to file
         id: aws-network-config
         run: |
-          aws ecs describe-services --cluster infra-prod --services police-data-trust-backend-dev | jq '.services[0] | { networkConfiguration }' | jq 'del(.networkConfiguration.awsvpcConfiguration.assignPublicIp)' > network-config-scraper.json
+          aws ecs describe-services --cluster infra-prod --services police-data-trust-backend-dev | jq '.services[0].networkConfiguration' | jq 'del(.awsvpcConfiguration.assignPublicIp)' > network-config-scraper.json
         with:
           files: |
             network-config=network-config-scraper.json
