@@ -1,6 +1,6 @@
 # docker build command:
 # docker build -t police-data-trust-scraper-dev -f Dockerfile .
-FROM python:3-slim-bullseye
+FROM python:3-slim-bookworm
 
 RUN apt update -y && apt install curl unzip -y
 
