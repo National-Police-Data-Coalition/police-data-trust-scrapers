@@ -1,7 +1,7 @@
-from typing import List, Optional, Dict, Any, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
-from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
+from scrapy.spiders import CrawlSpider, Rule
 
 from scrapers.common.parse import parse_string_to_number
 from scrapers.fifty_a.fifty_a.items import OfficerItem

@@ -2,7 +2,6 @@ import pytest
 from scrapy.http import HtmlResponse
 
 from scrapers.fifty_a.fifty_a.spiders.officer import OfficerSpider
-
 from tests.fifty_a.fifty_a.spiders.officer_page import officer_1
 
 mock_response = HtmlResponse(url="dummy", body=officer_1)
