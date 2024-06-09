@@ -2,24 +2,20 @@
 
 import datetime
 import json
-import shutil
 
 import requests
+import urllib3
 
 from scrapers import config
+from scrapers.common.directories import delete_and_recreate_directory
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 NOW = datetime.datetime.now(datetime.UTC)
 CPDP_DATED_DIR = config.DATA_DIR / "citizens_police_data_project" / str(NOW.date())
 OFFICERS_DIR = CPDP_DATED_DIR / "officers"
 
 OFFICERS_URL_TEMPLATE = "https://data.cpdp.co/api/officer-allegations/officers/?&startIdx={start_idx}&length={batch_size}"
-
-
-def setup() -> None:
-    if OFFICERS_DIR.exists():
-        shutil.rmtree(OFFICERS_DIR)
-
-    OFFICERS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def pull_data():
@@ -35,6 +31,8 @@ def pull_data():
         res_data = res.json()
 
         officers = res_data["officers"]
+        print(f"Found {len(officers)} officers")
+
         file_name = f"officers_{start_idx}.json"
         file_path = OFFICERS_DIR / file_name
 
@@ -48,5 +46,5 @@ def pull_data():
 
 
 if __name__ == "__main__":
-    setup()
+    delete_and_recreate_directory(OFFICERS_DIR)
     pull_data()
