@@ -8,3 +8,6 @@ show_missing = true
 
 [tool.bandit]
 exclude_dirs = ["tests"]
+
+[tool.ruff.lint]
+extend-select = ["I"]
