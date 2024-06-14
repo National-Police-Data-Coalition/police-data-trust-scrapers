@@ -21,3 +21,10 @@ repos:
       - id: ruff
         args: ["--preview", "--fix"]
       - id: ruff-format
+  - repo: https://github.com/thlorenz/doctoc.git
+    rev: v2.2.0
+    hooks:
+      - id: doctoc
+        name: Add TOC for md files
+        files:
+          ^README\.md$
