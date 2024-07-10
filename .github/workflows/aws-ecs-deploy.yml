@@ -77,7 +77,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Build and push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/amd64,linux/arm64
@@ -116,7 +116,7 @@ jobs:
           container-name: ${{ needs.setup_env.outputs.AWS_APPENV }}
           image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ needs.setup_env.outputs.AWS_APPENV }}:${{ needs.setup_env.outputs.IMAGE_TAG }}
       - name: Deploy to Amazon ECS Scheduled Tasks
-        uses: airfordable/ecs-deploy-task-definition-to-scheduled-task@v2.0.0
+        uses: airfordable/ecs-deploy-task-definition-to-scheduled-task@v2.1.0
         with:
           cluster: infra-prod
           task-definition: task-def-scraper.json
