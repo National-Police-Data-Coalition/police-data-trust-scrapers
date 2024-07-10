@@ -116,7 +116,7 @@ jobs:
           container-name: ${{ needs.setup_env.outputs.AWS_APPENV }}
           image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ needs.setup_env.outputs.AWS_APPENV }}:${{ needs.setup_env.outputs.IMAGE_TAG }}
       - name: Deploy to Amazon ECS Scheduled Tasks
-        uses: mikeyavorsky/ecs-deploy-task-definition-to-scheduled-task@fix-for-arm
+        uses: mikeyavorsky/ecs-deploy-task-definition-to-scheduled-task@v3.1.0
         with:
           cluster: infra-prod
           task-definition: task-def-scraper.json
