@@ -12,10 +12,8 @@ class CommandItem(BaseItem):
 
 @dataclass
 class OfficerItem(BaseItem):
+    taxnum: int
     url: str
-    name: str
-    badge: str
-    race: str
     gender: str
     complaints: List[dict]
     age: str

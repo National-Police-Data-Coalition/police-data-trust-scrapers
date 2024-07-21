@@ -18,18 +18,29 @@ class OfficerSpider(CrawlSpider):
     )
 
     def parse_officer(self, response):
-        race, gender = self.parse_race_and_gender(response)
+        _, gender = self.parse_race_and_gender(response)
         officer = OfficerItem(
+            taxnum=self.parse_taxnum(response),
             url=response.url,
-            name=response.css("h1::text").get(),
-            badge=response.css(".badge::text").get(),
-            race=race,
             gender=gender,
             complaints=self.parse_complaints(response),
             age=response.css(".age::text").get(),
         )
 
         yield officer
+
+    @staticmethod
+    def parse_taxnum(response) -> Optional[int]:
+        taxid_span_text = response.css(".taxid::text").get()
+
+        if taxid_span_text:
+            taxid_text_split = taxid_span_text.split("#")
+            if len(taxid_text_split) <= 1 or len(taxid_text_split) >= 3:
+                return None
+            else:
+                return int(taxid_text_split[1])
+
+
 
     @staticmethod
     def parse_race_and_gender(response) -> Tuple[Optional[str], Optional[str]]:
@@ -53,18 +64,21 @@ class OfficerSpider(CrawlSpider):
         return race, gender
 
     @staticmethod
-    def parse_complaints(response) -> List[Optional[Dict[str, Any]]]:
+    def parse_complaints(response) -> Optional[List[int]]:
         complaints = []
-        for i in ["complaints", "allegations", "substantiated"]:
-            count = response.css(f".column .{i} .count::text").get()
-            count_parsed = parse_string_to_number(count)
-            if count_parsed is not None:
-                complaints.append({"name": i, "count": count_parsed})
 
-        for disp in response.css(".dispositions").css(".disposition"):
-            count = disp.css(".count::text").get()
-            count_parsed = parse_string_to_number(count)
-            if count_parsed is not None:
-                name = disp.css(".name::text").get()
-                complaints.append({"name": name, "count": count_parsed})
+        complaints_anchors = response.css(".complaint a::text").getall()
+
+        for anchor_text in complaints_anchors:
+            anchor_text_split = anchor_text.strip().split(",")
+            if len(anchor_text_split) <= 1 or len(anchor_text_split) >= 3:
+                continue
+            else:
+                complaint_text, _ = anchor_text_split
+                complaint_text_split = complaint_text.split("#")
+                if len(complaint_text_split) <= 1 or len(complaint_text_split) >= 3:
+                    continue
+                else:
+                    complaints.append(int(complaint_text_split[1]))
+
         return complaints
