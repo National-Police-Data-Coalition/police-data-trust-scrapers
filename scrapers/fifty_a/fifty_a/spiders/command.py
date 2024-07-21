@@ -1,18 +1,90 @@
+from typing import Optional, Tuple
+
 import scrapy
+from scrapy.spiders import Rule, CrawlSpider
+from scrapy.linkextractors import LinkExtractor
 
-from scrapers.fifty_a.fifty_a.items import CommandItem
+from scrapers.fifty_a.fifty_a.items import CommandItem, CommandOfficerItem
 
+BASE_URL = 'https://www.50-a.org'
 
-class CommandSpider(scrapy.Spider):
+class CommandSpider(CrawlSpider):
     name = "command"
     allowed_domains = ["www.50-a.org"]
     start_urls = ["https://www.50-a.org/commands"]
 
-    def parse(self, response):
-        for c in response.css("a.command"):
-            url = c.css("::attr(href)").extract_first()
-            command = CommandItem(
-                name=c.css("::text").extract_first(), url=response.urljoin(url)
-            )
+    rules = (
+        Rule(LinkExtractor(allow="/command"), callback="parse_command", follow=False),
+    )
 
-            yield command
+    def parse_command(self, response):
+        commanding_officer_url, command_address, command_description = self.parse_intro(response)
+        command = CommandItem(
+            name=response.css(".title.command::text").extract_first(),
+            url=response.url,
+            website_url=self.parse_website_url(response),
+            commanding_officer_url=commanding_officer_url,
+            address=command_address,
+            description=command_description,
+            officers=self.parse_officers(response)
+        )
+
+        yield command
+
+    @staticmethod
+    def parse_intro(response) -> Tuple[Optional[str], Optional[str], Optional[str]]:
+        commanding_officer_url = None
+        command_address = None
+
+        commanding_officer_relative_url = response.css(".intro p span + a::attr(href)").extract_first()
+
+        if commanding_officer_relative_url:
+            commanding_officer_url = BASE_URL + commanding_officer_relative_url
+
+        address_link = response.css(".intro > a")
+
+        if 'maps' in address_link.attrib['href']:
+            command_address = address_link.css("::text").extract_first()
+
+        command_description = response.css(".intro p:last-of-type::text").get()
+
+        return commanding_officer_url, command_address, command_description
+
+    @staticmethod
+    def parse_website_url(response) -> Optional[str]:
+        links_column_elements = response.css(".links.column a")
+
+        for link in links_column_elements:
+            link_text = link.css("::text").get()
+            # There are several links, sometimes the number varies, so matching the string is important to finding the
+            # right link since no other attribute differs among them
+            if link_text == "Precinct Website":
+                return link.css("::attr(href)").get()
+
+        # If no elements found(sometimes there are no links, or no website links) then just return None
+        return None
+
+    @staticmethod
+    def parse_officers(response) -> list[Optional[CommandOfficerItem]]:
+        officer_list = []
+
+        officer_table_elements = response.css(".officers table tbody tr:not(.header)")
+
+        for officer_table_element in officer_table_elements:
+            officer_url = None
+            officer_relative_url = officer_table_element.css("td.officer a::attr(href)").extract_first()
+            officer_most_recent = officer_table_element.css("td.year::text").extract_first().strip()
+
+            if officer_relative_url:
+                officer_url = BASE_URL + officer_relative_url
+
+            if officer_most_recent:
+                officer_most_recent = int(officer_most_recent)
+
+            officer_list.append(CommandOfficerItem(
+                url=officer_url,
+                most_recent=officer_most_recent
+            ))
+
+        return officer_list
+
