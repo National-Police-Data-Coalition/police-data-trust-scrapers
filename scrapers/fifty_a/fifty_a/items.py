@@ -15,5 +15,5 @@ class OfficerItem(BaseItem):
     taxnum: int
     url: str
     gender: str
-    complaints: List[dict]
+    complaints: List[int]
     age: str
