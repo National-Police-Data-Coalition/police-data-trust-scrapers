@@ -1,16 +1,15 @@
-officer_1 = b"""
-<!doctype html>
-<html lang="en-us">
-  <head>
+officer_1 = """
+<!DOCTYPE html>
+<html lang="en-us"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Lawrence Wang : 50-a.org</title>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
-          integrity="sha384-HmYpsz2Aa9Gh3JlkCoh8kUJ2mUKJKTnkyC2Lzt8aLzpPOpnDe8KpFE2xNiBpMDou" crossorigin="anonymous">
-    <link rel="stylesheet" href="/style.css">
-
-
+    <link rel="stylesheet" href="Lawrence%20Wang%20_%2050-a.org_files/bulma.min.css" integrity="sha384-HmYpsz2Aa9Gh3JlkCoh8kUJ2mUKJKTnkyC2Lzt8aLzpPOpnDe8KpFE2xNiBpMDou" crossorigin="anonymous">
+    <link rel="stylesheet" href="Lawrence%20Wang%20_%2050-a.org_files/style.css">
+    
+    
     <link rel="canonical" href="https://www.50-a.org/officer/DPW3">
     <style>
       section.section form.search {
@@ -35,14 +34,14 @@ officer_1 = b"""
       <meta name="format-detection" content="telephone=no">
   </head>
 
-  <body>
+  <body data-new-gr-c-s-check-loaded="8.912.0" data-gr-ext-installed="">
     <header>
-
+      
       <form action="/search" method="GET">
         <label for="q" class="label">Search by Officer Name or Badge Number</label>
         <div class="field has-addons">
           <div class="control is-expanded">
-            <input class="input" type="text" id="q" name="q" value="" placeholder="enter name or badge #" required>
+            <input class="input" type="text" id="q" name="q" placeholder="enter name or badge #" required="">
           </div>
           <div class="control">
             <button class="button is-info" type="submit">Search</button>
@@ -54,56 +53,42 @@ officer_1 = b"""
   <div class="container">
     <div class="identity">
 
-      <a href="/images/officer/DPW3-lawrence-wang.jpg" class="is-pulled-right ml-1 is-hidden-mobile">
+      <a href="https://www.50-a.org/images/officer/DPW3-lawrence-wang.jpg" class="is-pulled-right ml-1 is-hidden-mobile">
         <picture>
-          <source type="image/avif" srcset="/images/officer/384/DPW3-lawrence-wang.avif" />
-          <img src="/images/officer/180/DPW3-lawrence-wang.jpg"
-               alt="Lawrence Wang"
-               height="180" width="180"
-               srcset="/images/officer/128/DPW3-lawrence-wang.jpg 128w,
-                       /images/officer/180/DPW3-lawrence-wang.jpg 180w,
-                       /images/officer/384/DPW3-lawrence-wang.jpg 384w,
-                       /images/officer/DPW3-lawrence-wang.jpg 640w" />
+          <source type="image/avif" srcset="Lawrence%20Wang%20_%2050-a.org_files/DPW3-lawrence-wang.avif 1x">
+          <img src="Lawrence%20Wang%20_%2050-a.org_files/DPW3-lawrence-wang.jpg" alt="Lawrence Wang" height="180" width="180" srcset="Lawrence%20Wang%20_%2050-a.org_files/DPW3-lawrence-wang_003.jpg 128w, Lawrence%20Wang%20_%2050-a.org_files/DPW3-lawrence-wang.jpg 180w, Lawrence%20Wang%20_%2050-a.org_files/DPW3-lawrence-wang_002.jpg 384w, Lawrence%20Wang%20_%2050-a.org_files/DPW3-lawrence-wang_004.jpg 640w">
         </picture>
       </a>
 
       <h1 class="title name">Lawrence Wang</h1>
 
       <figure class="image is-128x128 is-pulled-right ml-1 is-hidden-tablet">
-        <a href="/images/officer/DPW3-lawrence-wang.jpg">
+        <a href="https://www.50-a.org/images/officer/DPW3-lawrence-wang.jpg">
           <picture>
-            <source type="image/avif" srcset="/images/officer/384/DPW3-lawrence-wang.avif" />
-            <img src="/images/officer/128/DPW3-lawrence-wang.jpg"
-                 alt="Lawrence Wang"
-                 height="128" width="128"
-                 srcset="/images/officer/128/DPW3-lawrence-wang.jpg 128w,
-                         /images/officer/180/DPW3-lawrence-wang.jpg 180w,
-                         /images/officer/384/DPW3-lawrence-wang.jpg 384w,
-                         /images/officer/DPW3-lawrence-wang.jpg 640w" />
+            <source type="image/avif" srcset="Lawrence%20Wang%20_%2050-a.org_files/DPW3-lawrence-wang.avif 1x">
+            <img src="Lawrence%20Wang%20_%2050-a.org_files/DPW3-lawrence-wang_003.jpg" alt="Lawrence Wang" height="128" width="128" srcset="Lawrence%20Wang%20_%2050-a.org_files/DPW3-lawrence-wang_003.jpg 128w, Lawrence%20Wang%20_%2050-a.org_files/DPW3-lawrence-wang.jpg 180w, Lawrence%20Wang%20_%2050-a.org_files/DPW3-lawrence-wang_002.jpg 384w, Lawrence%20Wang%20_%2050-a.org_files/DPW3-lawrence-wang_004.jpg 640w">
           </picture>
         </a>
       </figure>
 
-
+      
       <div class="command">
-
-        <span class="rank">Lieutenant</span> at <a class="command" href="/command/151">Highway Unit 01</a> since July 2021,
-          <a href="https://oip.nypdonline.org/view/1/@TAXID=948283" rel="noreferrer">active</a>
+        
+        <span class="rank">Lieutenant</span> at <a class="command" href="https://www.50-a.org/command/151">Highway Unit 01</a>
       </div>
 
       <div class="commandhistory">
         <span class="servedin">Also served at </span>
-            <a href="/command/81">Transportation Bureau Highway District</a>,
-            <a href="/command/49pct">49th Precinct</a>,
-            <a href="/command/23pct">23rd Precinct</a>
+            <a href="https://www.50-a.org/command/81">Transportation Bureau Highway District</a>,
+            <a href="https://www.50-a.org/command/49pct">49th Precinct</a>,
+            <a href="https://www.50-a.org/command/23pct">23rd Precinct</a>
       </div>
 
       <div class="service">
           Service
            started July 2009,
 
-        <span class="compensation"
-title="Annual Salary: $135511
+        <span class="compensation" title="Annual Salary: $135511
 Regular Pay: $135140
 Overtime: $40998
 Other: $19436">made $196,000 last year,</span>
@@ -112,31 +97,31 @@ Other: $19436">made $196,000 last year,</span>
       </div>
 
 
-
+      
       <div class="desc">
-
+        
         <span class="desc">Asian Male, <span class="age">37</span></span>
+        
 
-
-
+        
       </div>
 
 
 
       <div class="substantiated-allegations">
-        <br />
+        <br>
         <article class="message is-info">
           <div class="message-body">
-            <b>Substantiated Allegations:</b><br />
+            <b>Substantiated Allegations:</b><br>
             Discourtesy: Word
           </div>
         </article>
       </div>
 
 
-
+      
       <div class="discipline">
-        <br />
+        <br>
         <article class="message is-info">
           <div class="message-body">
             <p><b>Discipline Cases:</b></p>
@@ -147,41 +132,42 @@ Other: $19436">made $196,000 last year,</span>
                 <div class="column documents">
                 </div>
               </div>
-            <br /><a href="#discipline-details">View Details</a>
+            <br><a href="#discipline-details">View Details</a>
           </div>
         </article>
       </div>
-
+      
 
       <div class="lawsuits">
-        <br />
+        <br>
         <article class="message is-info">
           <div class="message-body">
-            <b>Lawsuit settlements:</b><br />
+            <b>Lawsuit settlements:</b><br>
               <span class="payout">$60,000 &nbsp;</span>
               <span class="case is-hidden-mobile">Cavender, Shawn vs City of New York, et al.,
                 2021
-
+                
                 SDNY
               </span>
               <span class="case is-hidden-tablet">SDNY&nbsp;21CV07290</span>
-              <br />
+              <br>
               <span class="payout">$87,501 &nbsp;</span>
               <span class="case is-hidden-mobile">Toure, Abass vs City of New York, et al.,
                 2020
-
+                
                 SDNY
               </span>
               <span class="case is-hidden-tablet">SDNY&nbsp;20CV04310</span>
-              <br />
+              <br>
             <a href="#lawsuits-details">View Details</a>
           </div>
         </article>
       </div>
 
 
+
     </div>
-    <br />
+    <br>
   </div>
 
   <div class="container summary">
@@ -227,9 +213,9 @@ Other: $19436">made $196,000 last year,</span>
   </div>
 
   <div class="container complaints is-hidden-tablet">
-    <br />
+    <br>
     <div class="complaint">
-      <a href="/complaint/202400461">
+      <a href="https://www.50-a.org/complaint/202400461">
         Complaint #202400461,
         January 2024
       </a>
@@ -310,13 +296,13 @@ Other: $19436">made $196,000 last year,</span>
 
         </tbody>
       </table>
-      <a class="details" href="/complaint/202400461">additional details</a>
+      <a class="details" href="https://www.50-a.org/complaint/202400461">additional details</a>
 
     </div>
-    <br />
+    <br>
 
     <div class="complaint">
-      <a href="/complaint/202002491">
+      <a href="https://www.50-a.org/complaint/202002491">
         Complaint #202002491,
         March 2020
       </a>
@@ -341,13 +327,13 @@ Other: $19436">made $196,000 last year,</span>
 
         </tbody>
       </table>
-      <a class="details" href="/complaint/202002491">additional details</a>
+      <a class="details" href="https://www.50-a.org/complaint/202002491">additional details</a>
 
     </div>
-    <br />
+    <br>
 
     <div class="complaint">
-      <a href="/complaint/201810646">
+      <a href="https://www.50-a.org/complaint/201810646">
         Complaint #201810646,
         December 2018
       </a>
@@ -372,13 +358,13 @@ Other: $19436">made $196,000 last year,</span>
 
         </tbody>
       </table>
-      <a class="details" href="/complaint/201810646">additional details</a>
+      <a class="details" href="https://www.50-a.org/complaint/201810646">additional details</a>
 
     </div>
-    <br />
+    <br>
 
     <div class="complaint">
-      <a href="/complaint/201401749">
+      <a href="https://www.50-a.org/complaint/201401749">
         Complaint #201401749,
         February 2014
       </a>
@@ -429,15 +415,15 @@ Other: $19436">made $196,000 last year,</span>
         <tr class="document">
           <th>Documents:</th>
           <td>
-            <a href="/documents/201401749_ClosingReport.pdf">Complaint Closing Report</a>
+            <a href="https://www.50-a.org/documents/201401749_ClosingReport.pdf">Complaint Closing Report</a>
           </td>
         </tr>
         </tbody>
       </table>
-      <a class="details" href="/complaint/201401749">additional details</a>
+      <a class="details" href="https://www.50-a.org/complaint/201401749">additional details</a>
 
     </div>
-    <br />
+    <br>
 
   </div>
 
@@ -446,12 +432,12 @@ Other: $19436">made $196,000 last year,</span>
       <tbody>
           <tr class="complaint">
             <th colspan="3">
-              <a href="/complaint/202400461" class="date">
+              <a href="https://www.50-a.org/complaint/202400461" class="date">
                 Complaint #202400461,
                 January 2024
               </a>
-            </td>
-          </tr>
+            
+          </th></tr>
 
           <tr class="header">
             <td class="allegation">Allegation</td>
@@ -516,17 +502,17 @@ Other: $19436">made $196,000 last year,</span>
 
           <tr class="details">
             <td colspan="3">
-              <a href="/complaint/202400461" class="details">additional details</a>
+              <a href="https://www.50-a.org/complaint/202400461" class="details">additional details</a>
             </td>
           </tr>
           <tr class="complaint">
             <th colspan="3">
-              <a href="/complaint/202002491" class="date">
+              <a href="https://www.50-a.org/complaint/202002491" class="date">
                 Complaint #202002491,
                 March 2020
               </a>
-            </td>
-          </tr>
+            
+          </th></tr>
 
           <tr class="header">
             <td class="allegation">Allegation</td>
@@ -551,17 +537,17 @@ Other: $19436">made $196,000 last year,</span>
 
           <tr class="details">
             <td colspan="3">
-              <a href="/complaint/202002491" class="details">additional details</a>
+              <a href="https://www.50-a.org/complaint/202002491" class="details">additional details</a>
             </td>
           </tr>
           <tr class="complaint">
             <th colspan="3">
-              <a href="/complaint/201810646" class="date">
+              <a href="https://www.50-a.org/complaint/201810646" class="date">
                 Complaint #201810646,
                 December 2018
               </a>
-            </td>
-          </tr>
+            
+          </th></tr>
 
           <tr class="header">
             <td class="allegation">Allegation</td>
@@ -586,17 +572,17 @@ Other: $19436">made $196,000 last year,</span>
 
           <tr class="details">
             <td colspan="3">
-              <a href="/complaint/201810646" class="details">additional details</a>
+              <a href="https://www.50-a.org/complaint/201810646" class="details">additional details</a>
             </td>
           </tr>
           <tr class="complaint">
             <th colspan="3">
-              <a href="/complaint/201401749" class="date">
+              <a href="https://www.50-a.org/complaint/201401749" class="date">
                 Complaint #201401749,
                 February 2014
               </a>
-            </td>
-          </tr>
+            
+          </th></tr>
 
           <tr class="header">
             <td class="allegation">Allegation</td>
@@ -644,131 +630,175 @@ Other: $19436">made $196,000 last year,</span>
             <tr class="document">
               <td><b>Documents: </b></td>
               <td colspan="2">
-                <a href="/documents/201401749_ClosingReport.pdf">Complaint Closing Report</a>
+                <a href="https://www.50-a.org/documents/201401749_ClosingReport.pdf">Complaint Closing Report</a>
               </td>
             </tr>
 
           <tr class="details">
             <td colspan="3">
-              <a href="/complaint/201401749" class="details">additional details</a>
+              <a href="https://www.50-a.org/complaint/201401749" class="details">additional details</a>
             </td>
           </tr>
       </tbody>
     </table>
 
-    <br />
+    <br>
   </div>
 
   <div class="container definitions">
-
+    
 <h2>Conclusion Meanings:</h2>
-<div class='conclusion'><span class='term'>'Exonerated':</span> <span class='definition'>or 'Within NYPD Guidelines' - the alleged conduct occurred but did not violate the NYPD's own rules, which often give officers significant discretion.</span></div><div class='conclusion'><span class='term'>'Substantiated':</span> <span class='definition'>The alleged conduct occurred and it violated the rules. The NYPD has discretion over what, if any, discipline is imposed.</span></div>
+<div class="conclusion"><span class="term">'Exonerated':</span> <span class="definition">or
+ 'Within NYPD Guidelines' - the alleged conduct occurred but did not 
+violate the NYPD's own rules, which often give officers significant 
+discretion.</span></div><div class="conclusion"><span class="term">'Substantiated':</span> <span class="definition">The alleged conduct occurred and it violated the rules. The NYPD has discretion over what, if any, discipline is imposed.</span></div>
 
-    <p><a href="/conclusions">Further details</a> on conclusion definitions.</p>
+    <p><a href="https://www.50-a.org/conclusions">Further details</a> on conclusion definitions.</p>
   </div>
 
-  <br />
+  <br>
   <div class="discipline-details">
     <h2 class="title is-4 discipline"><a name="discipline-details">Discipline</a></h2>
       <div class="columns is-gapless">
         <div class="column case"><span>Case:</span> 2021-23621</div>
-
+        
         <div class="column closed"><span>Closed:</span> 8/1/2022</div>
       </div>
-      <div class="details"><span>Case Details:<span></div>
+      <div class="details"><span>Case Details:<span></span></span></div>
       <ol class="details">
         <li class="allegation">
-
+          
           Failed to activate their body-worn camera.
         </li>
       </ol>
       <div class="penalty"><span>Penalty:</span> Training</div>
       <div class="recommendation"><span>Recommendation:</span> Training</div>
-      <br />
+      <br>
   </div>
 
-  <br />
+  <br>
   <div class="lawsuits-details">
     <h2 class="title is-4 lawsuits"><a name="lawsuits-details">Lawsuits</a></h2>
 
-    Named in 5 known lawsuits, $147,501 total settlements.<br /><br />
+    Named in 5 known lawsuits, $147,501 total settlements.<br><br>
 
+      
 
-
-      <a href="https://www.courtlistener.com/docket/60324680/cavender-v-city-of-new-york/">Cavender, Shawn vs City of New York, et al.</a><br />
+      <a href="https://www.courtlistener.com/docket/60324680/cavender-v-city-of-new-york/">Cavender, Shawn vs City of New York, et al.</a><br>
 
       Case # 21CV07290,
       U.S. District Court - Southern District NY, October 28, 2021, ended November 2, 2022
-      <br />$60,000 Settlement
+      <br>$60,000 Settlement
 
-      <br />
+      <br>
       <a href="https://storage.courtlistener.com/recap/gov.uscourts.nysd.565800/gov.uscourts.nysd.565800.17.0.pdf" class="document">Complaint</a>
 
-      <br /><span class="summary">Description:</span> On June 2, 2020, plaintiff was lawfully and peacefully attending a protest of police misconduct in the wake of the killing of George Floyd.  An unidentified uniformed police officer shoved a protestor without provocation, causing a stampede of protestors and NYPD members in riot gear in plaintiff&#x27;s direction.  Plaintiff ran to try to escape the oncoming rush but stopped to help a person that had fallen on the ground.  As plaintiff was helping this person, plaintiff encountered P.O. Michael Laborde in riot gear so plaintiff extended his arms over his head with his hands open in a &quot;hands up&quot; gesture.  P.O. Laborde nevertheless proceeded to violently throw plaintiff to the ground and began punching, kicking and hi...
-      <br />
-      <br />
+      <br><span class="summary">Description:</span> On June 2, 2020, 
+plaintiff was lawfully and peacefully attending a protest of police 
+misconduct in the wake of the killing of George Floyd.  An unidentified 
+uniformed police officer shoved a protestor without provocation, causing
+ a stampede of protestors and NYPD members in riot gear in plaintiff's 
+direction.  Plaintiff ran to try to escape the oncoming rush but stopped
+ to help a person that had fallen on the ground.  As plaintiff was 
+helping this person, plaintiff encountered P.O. Michael Laborde in riot 
+gear so plaintiff extended his arms over his head with his hands open in
+ a "hands up" gesture.  P.O. Laborde nevertheless proceeded to violently
+ throw plaintiff to the ground and began punching, kicking and hi...
+      <br>
+      <br>
 
-      Ruiz, Juan Iii vs City of New York, et al.<br />
+      Ruiz, Juan Iii vs City of New York, et al.<br>
 
       Case # 151867/2021,
       Supreme Court - New York, March 11, 2021
+      
 
+      <br>
+      <a href="https://iapps.courts.state.ny.us/nyscef/ViewDocument?docIndex=NkXfc3lbsyTXRiEiQCXIqw==" class="document">Complaint</a>
 
+      <br><span class="summary">Description:</span> On March 14, 2020, 
+and at all times hereinafter mentioned and upon
+information and belief, the plaintiff, was lawfully present at or about 
+the intersection of East 102nd Street and 1st Avenue when he was 
+approached, assaulted and battered by the defendant officers. Plaintiff 
+was tackled to the ground while on his motorcycle. The plaintiff was 
+then punched and kicked repeatedly, his foot was being twisted and was 
+forcefully placed in handcuffs. The plaintiff was then placed under 
+arrest, without probable cause, and was taken to the 23rd Police 
+Precinct, where he was placed in a holding cell until the following day,
+ on March 15, 2020 at approximately 8:00 a.m. The plaintiff was taken 
+Central Booking where he was ...
+      <br>
+      <br>
 
-
-      <br />
-      <br />
-
-      Torrence, Uranius vs City of New York, et al.<br />
+      Torrence, Uranius vs City of New York, et al.<br>
 
       Case # 153392/2020,
       Supreme Court - New York, October 1, 2020
+      
 
+      
+      
+      <br>
+      <br>
 
-
-
-      <br />
-      <br />
-
-      Torrence, Uranius vs City of New York, et al.<br />
+      Torrence, Uranius vs City of New York, et al.<br>
 
       Case # 153932/2020,
       Supreme Court - New York, October 1, 2020
+      
 
+      
+      
+      <br>
+      <br>
 
-
-
-      <br />
-      <br />
-
-      <a href="https://www.courtlistener.com/docket/17227753/toure-v-city-of-new-york/">Toure, Abass vs City of New York, et al.</a><br />
+      <a href="https://www.courtlistener.com/docket/17227753/toure-v-city-of-new-york/">Toure, Abass vs City of New York, et al.</a><br>
 
       Case # 20CV04310,
       U.S. District Court - Southern District NY, June 10, 2020, ended October 21, 2021
-      <br />$87,501 Settlement
+      <br>$87,501 Settlement
 
-      <br />
+      <br>
       <a href="https://storage.courtlistener.com/recap/gov.uscourts.nysd.538230/gov.uscourts.nysd.538230.51.0.pdf" class="document">Complaint</a>
 
-      <br /><span class="summary">Description:</span> On October 4, 2019, plaintiff&#x27;s brother, who is paralyzed from the waist down and wheelchair-bound, was being roughly and physically searched by defendant P.O. Zalewski and other P.O.s. Upon arriving at the scene of his handcuffed brother, plaintiff asked the P.O.s why they were arresting him. Despite complying with the P.O.s&#x27; orders, plaintiff was pushed by defendant P.O. Aiello. Plaintiff attempted to walk away but defendant P.O.s Elliott and Aiello continued to follow and push plaintiff. Defendant P.O. Wang ordered his officers to handcuff plaintiff. Several P.O.s surrounded, physically restrained, and repeatedly punched plaintiff. While plaintiff was on the ground, P.O. Zalewski forcefully stomped on the ba...
-      <br />
+      <br><span class="summary">Description:</span> On October 4, 2019, 
+plaintiff's brother, who is paralyzed from the waist down and 
+wheelchair-bound, was being roughly and physically searched by defendant
+ P.O. Zalewski and other P.O.s. Upon arriving at the scene of his 
+handcuffed brother, plaintiff asked the P.O.s why they were arresting 
+him. Despite complying with the P.O.s' orders, plaintiff was pushed by 
+defendant P.O. Aiello. Plaintiff attempted to walk away but defendant 
+P.O.s Elliott and Aiello continued to follow and push plaintiff. 
+Defendant P.O. Wang ordered his officers to handcuff plaintiff. Several 
+P.O.s surrounded, physically restrained, and repeatedly punched 
+plaintiff. While plaintiff was on the ground, P.O. Zalewski forcefully 
+stomped on the ba...
+      <br>
 
   </div>
 
-  <br />
+  <br>
   <div class="other-documents">
     <h2 class="title is-4 da-letters"><a name="documents">Other Documents</a></h2>
     <div class="document">
-      <a href="https://www.documentcloud.org/documents/21019814-daf-wang948283">DA Disclosure Letter</a>
+      <a href="https://www.documentcloud.org/documents/21019814-daf-wang948283">DA Disclosure Letter</a> 
     </div>
 
-</section>
+</div></section>
 
     <footer>
-      <a href="/">50-a.org</a> &mdash;
-      <a href="/about">About</a> &mdash;
+      <a href="https://www.50-a.org/">50-a.org</a> —
+      <a href="https://www.50-a.org/about">About</a> —
       <a href="https://www.nyc.gov/site/ccrb/complaints/file-a-complaint/file-online.page">File a complaint</a>
     </footer>
-  </body>
-</html>
+  
+
+</body><style>
+@media print {
+  #simplify-jobs-container {
+    display: none;
+  }
+}
+</style><div id="simplify-jobs-container" style="position: absolute; top: 0px; left: 0px; width: 0px; height: 0px; overflow: visible; z-index: 2147483647;"></div><script id="simplify-jobs-page-script" src="Lawrence%20Wang%20_%2050-a.org_files/pageScript.bundle.js"></script><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></html>
 """
