@@ -24,4 +24,4 @@ class OfficerItem(BaseItem):
     url: str
     gender: str
     complaints: List[int]
-    age: str
+    age: int
