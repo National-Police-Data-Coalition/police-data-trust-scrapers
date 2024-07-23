@@ -1,5 +1,6 @@
 data/
 *.jsonl
+*.csv
 
 
 # Byte-compiled / optimized / DLL files
