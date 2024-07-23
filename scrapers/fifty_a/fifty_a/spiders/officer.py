@@ -24,10 +24,17 @@ class OfficerSpider(CrawlSpider):
             url=response.url,
             gender=gender,
             complaints=self.parse_complaints(response),
-            age=response.css(".age::text").get(),
+            age=self.parse_age(response),
         )
 
         yield officer
+
+    def parse_age(self, response):
+        age = response.css(".age::text").get()
+        if age:
+            age = parse_string_to_number(age)
+        return age
+
 
     @staticmethod
     def parse_taxnum(response) -> Optional[int]:
