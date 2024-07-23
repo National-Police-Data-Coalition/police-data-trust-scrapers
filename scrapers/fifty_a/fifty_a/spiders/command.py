@@ -1,6 +1,7 @@
 from typing import Optional, Tuple
 
-import scrapy
+from scrapers.common.text_utility import strip_and_replace_text
+
 from scrapy.spiders import Rule, CrawlSpider
 from scrapy.linkextractors import LinkExtractor
 
@@ -19,13 +20,14 @@ class CommandSpider(CrawlSpider):
 
     def parse_command(self, response):
         commanding_officer_url, command_address, command_description = self.parse_intro(response)
+        website_url = self.parse_website_url(response)
         command = CommandItem(
-            name=response.css(".title.command::text").extract_first(),
-            url=response.url,
-            website_url=self.parse_website_url(response),
-            commanding_officer_url=commanding_officer_url,
-            address=command_address,
-            description=command_description,
+            name=strip_and_replace_text(response.css(".title.command::text").extract_first()),
+            url=strip_and_replace_text(response.url),
+            website_url=strip_and_replace_text(website_url),
+            commanding_officer_url=strip_and_replace_text(commanding_officer_url),
+            address=strip_and_replace_text(command_address),
+            description=strip_and_replace_text(command_description),
             officers=self.parse_officers(response)
         )
 
@@ -39,7 +41,7 @@ class CommandSpider(CrawlSpider):
         commanding_officer_relative_url = response.css(".intro p span + a::attr(href)").extract_first()
 
         if commanding_officer_relative_url:
-            commanding_officer_url = BASE_URL + commanding_officer_relative_url
+            commanding_officer_url = commanding_officer_relative_url
 
         address_link = response.css(".intro > a")
 
@@ -72,14 +74,15 @@ class CommandSpider(CrawlSpider):
 
         for officer_table_element in officer_table_elements:
             officer_url = None
-            officer_relative_url = officer_table_element.css("td.officer a::attr(href)").extract_first()
-            officer_most_recent = officer_table_element.css("td.year::text").extract_first().strip()
+            officer_most_recent = None
+            officer_scraped_url = officer_table_element.css("td.officer a::attr(href)").extract_first()
+            officer_scraped_most_recent = officer_table_element.css("td.year::text").extract_first().strip()
 
-            if officer_relative_url:
-                officer_url = BASE_URL + officer_relative_url
+            if officer_scraped_url:
+                officer_url = strip_and_replace_text(officer_scraped_url)
 
-            if officer_most_recent:
-                officer_most_recent = int(officer_most_recent)
+            if officer_scraped_most_recent:
+                officer_most_recent = int(officer_scraped_most_recent)
 
             officer_list.append(CommandOfficerItem(
                 url=officer_url,
