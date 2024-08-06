@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - "main"
-      - "add-dockerfile"
+      - "update-action"
   release:
     types:
       - created
@@ -114,12 +114,8 @@ jobs:
           task-definition: task-def-scraper.json
           container-name: ${{ needs.setup_env.outputs.AWS_APPENV }}
           image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ needs.setup_env.outputs.AWS_APPENV }}:${{ needs.setup_env.outputs.IMAGE_TAG }}
-      - name: Run Task on Amazon ECS
-        uses: mikeyavorsky/amazon-ecs-run-task@main
+      - name: Deploy to Amazon ECS Scheduled Tasks
+        uses: mikeyavorsky/ecs-deploy-task-definition-to-scheduled-task@v3.1.0
         with:
-          task-definition: ${{ steps.task-definition.outputs.task-definition }}
           cluster: infra-prod
-          count: 1
-          network-configuration: network-config-scraper.json
-          launch-type: FARGATE
-          started-by: github-actions-${{ github.actor }}
+          task-definition: task-def-scraper.json
