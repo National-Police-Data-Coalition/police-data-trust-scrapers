@@ -109,7 +109,7 @@ jobs:
             jq 'del(.taskDefinitionArn,.revision,.status,.registeredBy,.registeredAt,.compatibilities,.requiresAttributes)' > task-def-scraper.json
       - name: Interpolate new Docker Image into Task Definition
         id: task-definition
-        uses: aws-actions/amazon-ecs-render-task-definition@v1.4.0
+        uses: aws-actions/amazon-ecs-render-task-definition@v1.5.0
         with:
           task-definition: task-def-scraper.json
           container-name: ${{ needs.setup_env.outputs.AWS_APPENV }}
