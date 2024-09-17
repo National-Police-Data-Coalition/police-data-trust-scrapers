@@ -18,7 +18,7 @@
     export PYTHONPATH=/path/to/police-data-trust-scrapers/
     ```
 
-2. Create a virtual environment with Python 3.12.4
+2. Create a virtual environment with Python 3.12.5
 
 3. Install requirements
 

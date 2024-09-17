@@ -1,0 +1,24 @@
+name: Python tests
+
+on:
+- push
+- pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Python 3.12 Setup
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.12
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install python3-dev
+        python -m pip install --upgrade pip
+        python -m pip install -r requirements.txt
+        python -m pip install -r requirements_dev.txt
+    - name: Run tests
+      run: python -m pytest
