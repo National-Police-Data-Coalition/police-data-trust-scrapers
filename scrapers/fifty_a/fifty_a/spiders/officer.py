@@ -1,11 +1,15 @@
+import re
 import random
 import logging
+from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapers.common.parse import parse_string_to_number
 from scrapers.fifty_a.fifty_a.items import OfficerItem
+from models.officers import CreateOfficer, StateId
+from models.enums import Ethnicity
 
 
 class OfficerSpider(CrawlSpider):
@@ -15,7 +19,7 @@ class OfficerSpider(CrawlSpider):
 
     def __init__(self, *args, **kwargs):
         super(OfficerSpider, self).__init__(*args, **kwargs)
-        self.test_mode = kwargs.get("test_mode", False).lower() == "true"
+        self.test_mode = 'test_mode' in kwargs
         self.max_officers = int(kwargs.get("max_officers", 10))
 
         if self.test_mode:
@@ -50,39 +54,90 @@ class OfficerSpider(CrawlSpider):
             yield response.follow(officer_link, self.parse_officer)
 
     def parse_officer(self, response):
-        race, gender = self.parse_race_and_gender(response)
-        officer = OfficerItem(
-            url=response.url,
-            name=response.css("h1::text").get(),
-            badge=response.css(".badge::text").get(),
-            race=race,
-            gender=gender,
-            complaints=self.parse_complaints(response),
-            age=response.css(".age::text").get(),
-        )
+        name = response.css("h1.title.name::text").get()
+        name_parts = self.parse_name(name)
+        description = response.css("span.desc::text").get()
+        ethnicity, gender = self.parse_description(description)
 
-        yield officer
+        tax_id = response.css("span.taxid::text").re_first(r"Tax #(\d+)")
+        state_id = StateId(
+            state="NY",
+            id_name="Tax ID",
+            value=tax_id
+        ) if tax_id else None
+
+        rank = response.css("span.rank::text").get()
+
+        service_info = response.css("div.service::text").get()
+        service_start = re.search(r"started (\w+ \d{4})", service_info)
+        service_start = service_start.group(1) if service_start else None
+
+        scrap_data = {
+            "url": response.url,
+            "scraped_at": datetime.now().isoformat(),
+        }
+
+        officer_data = {
+            "first_name": name_parts.get("first_name"),
+            "middle_name": name_parts.get("middle_name"),
+            "last_name": name_parts.get("last_name"),
+            "suffix": name_parts.get("suffix"),
+            "ethnicity": self.map_ethnicity(ethnicity),
+            "gender": gender,
+            "state_ids": [state_id] if state_id else None
+        }
+
+        try:
+            officer = CreateOfficer(**officer_data)
+            yield officer.model_dump()
+        except ValueError as e:
+            logging.error(f"Validation error for officer {name}: {e}")
+            return None
 
     @staticmethod
-    def parse_race_and_gender(response) -> Tuple[Optional[str], Optional[str]]:
-        race = None
-        gender = None
+    def parse_name(name):
+        parts = name.split()
+        suffixes = ["Jr", "Sr", "II", "III", "IV"]
+        result = {}
 
-        description_text = response.xpath(
-            "//span[contains(@class, 'desc')]/text()"
-        ).get("")
-        race_and_gender = description_text.split(",")[0]
+        if parts[-1] in suffixes:
+            result["suffix"] = parts[-1].pop()
 
-        splits = [i.strip() for i in race_and_gender.split()]
-        if len(splits) == 0:
-            return race, gender
-        elif len(splits) == 1:
-            race = splits[0]
-        else:
-            race = " ".join(splits[:-1])
-            gender = splits[-1]
+        result["first_name"] = parts[0]
+        result["last_name"] = parts[-1]
+        if len(parts) > 2:
+            result["middle_name"] = " ".join(parts[1:-1])
+        return result
 
-        return race, gender
+    @staticmethod
+    def parse_description(description):
+        if description:
+            parts = description.split()
+            if len(parts) >= 2:
+                ethnicity = parts[0]
+                gender = parts[1]
+                return ethnicity, gender
+        return None, None
+
+    @staticmethod
+    def map_ethnicity(ethnicity):
+        if not ethnicity:
+            return Ethnicity.UNKNOWN
+
+        ethnicity_mapping = {
+            "black": Ethnicity.BLACK_AFRICAN_AMERICAN,
+            "white": Ethnicity.WHITE,
+            "asian": Ethnicity.ASIAN,
+            "hispanic": Ethnicity.HISPANIC_LATINO,
+            "american indian": Ethnicity.AMERICAN_INDIAN_ALASKA_NATIVE,
+            "native hawaiian": Ethnicity.NATIVE_HAWAIIAN_PACIFIC_ISLANDER,
+        }
+
+        for key, value in ethnicity_mapping.items():
+            if key in ethnicity.lower():
+                return value
+
+        return Ethnicity.UNKNOWN
 
     @staticmethod
     def parse_complaints(response) -> List[Optional[Dict[str, Any]]]:
