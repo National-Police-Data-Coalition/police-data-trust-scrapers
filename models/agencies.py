@@ -77,7 +77,9 @@ class CreateUnit(BaseUnit, BaseModel):
     email: Optional[str] = Field(None, description="Email of the unit")
     description: Optional[str] = Field(None, description="Description of the unit")
     address: Optional[str] = Field(None, description="Street address of the unit")
-    zip: Optional[str] = Field(None, description="Zip code of the unit")
+    city: Optional[str] = Field(None, description="City of the unit's HQ")
+    zip: Optional[str] = Field(None, description="Zip code of the unit's HQ")
+    state: Optional[str] = Field(None, description="State of the unit's HQ")
     date_established: Optional[str] = Field(None, description="The date that this unit was established by its parent agency.")
     commander_uid: Optional[str] = Field(None, description="The UID of the unit's current commander.")
 
