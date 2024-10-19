@@ -1,8 +1,9 @@
+import random
+import logging
 from typing import Any, Dict, List, Optional, Tuple
 
-from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
-
+from scrapy.linkextractors import LinkExtractor
 from scrapers.common.parse import parse_string_to_number
 from scrapers.fifty_a.fifty_a.items import OfficerItem
 
@@ -12,10 +13,41 @@ class OfficerSpider(CrawlSpider):
     allowed_domains = ["www.50-a.org"]
     start_urls = ["https://www.50-a.org/commands"]
 
-    rules = (
-        Rule(LinkExtractor(allow="command"), follow=True),
-        Rule(LinkExtractor(allow="officer"), callback="parse_officer"),
-    )
+    def __init__(self, *args, **kwargs):
+        super(OfficerSpider, self).__init__(*args, **kwargs)
+        self.test_mode = kwargs.get("test_mode", False).lower() == "true"
+        self.max_officers = int(kwargs.get("max_officers", 10))
+
+        if self.test_mode:
+            self.rules = (
+                Rule(LinkExtractor(allow="officer"), callback="parse_officer"),
+            )
+        else:
+            self.rules = (
+                Rule(LinkExtractor(allow="command"), follow=True),
+                Rule(LinkExtractor(allow="officer"), callback="parse_officer"),
+            )
+
+    def parse_start_url(self, response):
+        commands = response.css("a.command::attr(href)").getall()
+        if self.test_mode and commands:
+            selected_command = random.choice(commands)
+            yield response.follow(selected_command, self.parse_command)
+        elif not self.test_mode:
+            for command in commands:
+                yield response.follow(command, self.parse_command)
+
+    def parse_command(self, response):
+        officer_links = response.css("td.officer a.name::attr(href)").getall()
+        logging.info(f"Found {len(officer_links)} officers in {response.url}")
+
+        if self.test_mode:
+            random.shuffle(officer_links)
+            officer_links = officer_links[:self.max_officers]
+
+        for officer_link in officer_links:
+            logging.info(f"Yeilding request for {officer_link}")
+            yield response.follow(officer_link, self.parse_officer)
 
     def parse_officer(self, response):
         race, gender = self.parse_race_and_gender(response)
