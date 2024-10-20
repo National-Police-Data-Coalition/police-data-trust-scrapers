@@ -1,15 +1,16 @@
-import re
-import random
 import logging
+import random
+import re
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
+from scrapy.spiders import CrawlSpider, Rule
+
+from models.enums import Ethnicity
+from models.officers import CreateOfficer, StateId
 from scrapers.common.parse import parse_string_to_number
 from scrapers.fifty_a.fifty_a.items import OfficerItem
-from models.officers import CreateOfficer, StateId
-from models.enums import Ethnicity
 
 
 class OfficerSpider(CrawlSpider):
@@ -19,7 +20,7 @@ class OfficerSpider(CrawlSpider):
 
     def __init__(self, *args, **kwargs):
         super(OfficerSpider, self).__init__(*args, **kwargs)
-        self.test_mode = 'test_mode' in kwargs
+        self.test_mode = "test_mode" in kwargs
         self.max_officers = int(kwargs.get("max_officers", 10))
 
         if self.test_mode:
@@ -47,7 +48,7 @@ class OfficerSpider(CrawlSpider):
 
         if self.test_mode:
             random.shuffle(officer_links)
-            officer_links = officer_links[:self.max_officers]
+            officer_links = officer_links[: self.max_officers]
 
         for officer_link in officer_links:
             logging.info(f"Yeilding request for {officer_link}")
@@ -60,17 +61,15 @@ class OfficerSpider(CrawlSpider):
         ethnicity, gender = self.parse_description(description)
 
         tax_id = response.css("span.taxid::text").re_first(r"Tax #(\d+)")
-        state_id = StateId(
-            state="NY",
-            id_name="Tax ID",
-            value=tax_id
-        ) if tax_id else None
+        state_id = (
+            StateId(state="NY", id_name="Tax ID", value=tax_id) if tax_id else None
+        )
 
         rank = response.css("span.rank::text").get()
 
         command_info = response.css("div.command::text").get()
         logging.info(f"Command Info: {command_info}")
-        since_date = response.css("div.command::text").re(r'since\s+(.*)')
+        since_date = response.css("div.command::text").re(r"since\s+(.*)")
         service_info = response.css("div.service::text").get()
         service_start = re.search(r"started (\w+ \d{4})", service_info)
         service_start = service_start.group(1) if service_start else None
@@ -82,25 +81,24 @@ class OfficerSpider(CrawlSpider):
             "suffix": name_parts.get("suffix"),
             "ethnicity": self.map_ethnicity(ethnicity),
             "gender": gender,
-            "state_ids": [state_id] if state_id else None
+            "state_ids": [state_id] if state_id else None,
         }
 
         employment_history = []
 
-        employment_history.append({
-            'earliest_date': since_date,
-            'latest_date': datetime.now().strftime("%B %Y"),
-            'badge_number': response.css("span.badge::text").get(),
-            'highest_rank': rank,
-            'unit_uid': response.css("div.command a.command::attr(href)").get()
-        })
+        employment_history.append(
+            {
+                "earliest_date": since_date,
+                "latest_date": datetime.now().strftime("%B %Y"),
+                "badge_number": response.css("span.badge::text").get(),
+                "highest_rank": rank,
+                "unit_uid": response.css("div.command a.command::attr(href)").get(),
+            }
+        )
 
-        prev_employment = response.css(
-            "div.commandhistory a::attr(href)").getall()
+        prev_employment = response.css("div.commandhistory a::attr(href)").getall()
         for emp in prev_employment:
-            employment_history.append({
-                'unit_uid': emp
-            })
+            employment_history.append({"unit_uid": emp})
 
         try:
             officer = CreateOfficer(**officer_data)
@@ -113,7 +111,7 @@ class OfficerSpider(CrawlSpider):
             model="officer",
             data=officer.model_dump(),
             employment=employment_history,
-            service_start=service_start
+            service_start=service_start,
         )
 
     @staticmethod

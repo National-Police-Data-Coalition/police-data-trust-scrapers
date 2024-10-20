@@ -26,14 +26,20 @@ class TestCommand:
             pytest.fail(f"Unit Data is invalid: {e}")
 
         assert valid_data.name == "9th Precinct"
-        assert valid_data.website_url == "https://www1.nyc.gov/" + \
-            "site/nypd/bureaus/patrol/precincts/9th-precinct.page"
+        assert (
+            valid_data.website_url
+            == "https://www1.nyc.gov/"
+            + "site/nypd/bureaus/patrol/precincts/9th-precinct.page"
+        )
         assert valid_data.phone == "(212) 477-7812"
-        assert valid_data.description == "The 9th Precinct serves " + \
-            "the area from East Houston Street to East 14 Street from " + \
-            "Broadway, to the East River in Manhattan. The precinct is" + \
-            " home to the East Village, and features Tompkins " + \
-            "Square Park."
+        assert (
+            valid_data.description
+            == "The 9th Precinct serves "
+            + "the area from East Houston Street to East 14 Street from "
+            + "Broadway, to the East River in Manhattan. The precinct is"
+            + " home to the East Village, and features Tompkins "
+            + "Square Park."
+        )
         assert valid_data.address == "321 E 5th St"
         assert valid_data.city == "New York"
         assert valid_data.state == "NY"

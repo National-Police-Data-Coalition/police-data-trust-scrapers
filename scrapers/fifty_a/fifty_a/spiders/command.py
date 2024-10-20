@@ -1,6 +1,7 @@
-import re
-import random
 import logging
+import random
+import re
+
 import scrapy
 
 from models.agencies import CreateUnit
@@ -22,13 +23,16 @@ class CommandSpider(scrapy.Spider):
         logging.info(f"Found {len(commands)} units.")
         if self.test_mode and commands:
             random.shuffle(commands)
-            commands = commands[:self.max_units]
+            commands = commands[: self.max_units]
         for command in commands:
             yield response.follow(command, self.parse_command)
 
     def parse_command(self, response):
-        description_set = [desc.strip() for desc in response.css(
-            "div.intro p::text").getall() if desc.strip()]
+        description_set = [
+            desc.strip()
+            for desc in response.css("div.intro p::text").getall()
+            if desc.strip()
+        ]
         try:
             desc = description_set[-1]
         except IndexError:
@@ -40,33 +44,35 @@ class CommandSpider(scrapy.Spider):
         if address is not None:
             address_data = self.parse_address(address)
 
-        command_data = {k: v for k, v in {
-            "name": response.css("h1.title.command::text").get().strip(),
-            "website_url": response.css(
-                "div.links a[href*='nypd']::attr(href)").get(),
-            "phone": response.css(
-                "div.links p::text").re_first(r"\(\d{3}\) \d{3}-\d{4}"),
-            "description": desc,
-            "address": address_data.get("street"),
-            "city": address_data.get("city"),
-            "state": address_data.get("state"),
-            "zip": address_data.get("zip_code"),
-            "commander_uid": response.css(
-                "div.intro a[href*='/officer/']::attr(href)").get(),
-        }.items() if v is not None}
+        command_data = {
+            k: v
+            for k, v in {
+                "name": response.css("h1.title.command::text").get().strip(),
+                "website_url": response.css(
+                    "div.links a[href*='nypd']::attr(href)"
+                ).get(),
+                "phone": response.css("div.links p::text").re_first(
+                    r"\(\d{3}\) \d{3}-\d{4}"
+                ),
+                "description": desc,
+                "address": address_data.get("street"),
+                "city": address_data.get("city"),
+                "state": address_data.get("state"),
+                "zip": address_data.get("zip_code"),
+                "commander_uid": response.css(
+                    "div.intro a[href*='/officer/']::attr(href)"
+                ).get(),
+            }.items()
+            if v is not None
+        }
 
         try:
             unit = CreateUnit(**command_data)
         except ValueError as e:
-            logging.error(
-                f"Validation error for unit {command_data['name']}: {e}")
+            logging.error(f"Validation error for unit {command_data['name']}: {e}")
             return None
 
-        yield CommandItem(
-            url=response.url,
-            model="unit",
-            data=unit.model_dump()
-        )
+        yield CommandItem(url=response.url, model="unit", data=unit.model_dump())
 
     def parse_address(self, address):
         """Parse the address into its components:
@@ -80,7 +86,7 @@ class CommandSpider(scrapy.Spider):
                 "street": street,
                 "city": city,
                 "state": state,
-                "zip_code": zip_code
+                "zip_code": zip_code,
             }
         else:
             logging.error(f"Failed to parse address: {address}")

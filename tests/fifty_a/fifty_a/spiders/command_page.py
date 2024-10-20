@@ -9,9 +9,9 @@ command_1 = b"""
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
           integrity="sha384-HmYpsz2Aa9Gh3JlkCoh8kUJ2mUKJKTnkyC2Lzt8aLzpPOpnDe8KpFE2xNiBpMDou" crossorigin="anonymous">
     <link rel="stylesheet" href="/style.css">
-    
+
     <link rel="canonical" href="https://www.50-a.org/command/9pct">
-    
+
     <style>
       section.section form.search {
         margin-top: 2em;
@@ -32,7 +32,7 @@ command_1 = b"""
 
   <body>
     <header>
-      
+
       <form action="/search" method="GET">
         <label for="q" class="label">Search by Officer Name or Badge Number</label>
         <div class="field has-addons">
@@ -109,7 +109,7 @@ command_1 = b"""
               <a class="name"
                  href="/officer/X83Z"
                  title="Police Officer Jason Wu #14380"
-                 >Wu, Jason 
+                 >Wu, Jason
                 &nbsp; <span class="is-hidden-mobile">#14380</span>
               </a>
             </td>
@@ -122,7 +122,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2024
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -142,7 +142,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2024
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -162,14 +162,14 @@ command_1 = b"""
             <td class="year has-text-right">
               2024
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/3W8K"
                  title="Police Officer Renaud Richardson #26372"
-                 >Richardson, Renaud 
+                 >Richardson, Renaud
                 &nbsp; <span class="is-hidden-mobile">#26372</span>
               </a>
             </td>
@@ -182,7 +182,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2024
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -202,7 +202,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2024
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -222,7 +222,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2024
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -242,7 +242,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2024
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -262,7 +262,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2024
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -282,7 +282,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2024
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -302,7 +302,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2024
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -322,7 +322,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2023
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -342,7 +342,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2023
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -362,14 +362,14 @@ command_1 = b"""
             <td class="year has-text-right">
               2023
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/LRSH"
                  title="Sergeant Thomas Walsh #843"
-                 >Walsh, Thomas 
+                 >Walsh, Thomas
                 &nbsp; <span class="is-hidden-mobile">#843</span>
               </a>
             </td>
@@ -382,7 +382,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2023
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -402,7 +402,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2023
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -422,7 +422,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2023
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -442,7 +442,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2023
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -462,14 +462,14 @@ command_1 = b"""
             <td class="year has-text-right">
               2023
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/EYCR"
                  title="Police Officer Sharandeep Singh #27965"
-                 >Singh, Sharandeep 
+                 >Singh, Sharandeep
                 &nbsp; <span class="is-hidden-mobile">#27965</span>
               </a>
             </td>
@@ -482,7 +482,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2023
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -502,7 +502,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2023
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -522,7 +522,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2023
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -542,7 +542,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2023
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -562,7 +562,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2023
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -582,7 +582,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2023
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -602,7 +602,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2023
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -622,7 +622,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2023
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -642,7 +642,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2023
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -662,7 +662,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2022
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -682,7 +682,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2022
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -702,7 +702,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2022
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -722,7 +722,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2022
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -742,7 +742,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2022
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -762,14 +762,14 @@ command_1 = b"""
             <td class="year has-text-right">
               2022
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/KEQD"
                  title="Sergeant Arsenio Berrios #1128"
-                 >Berrios, Arsenio 
+                 >Berrios, Arsenio
                 &nbsp; <span class="is-hidden-mobile">#1128</span>
               </a>
             </td>
@@ -782,14 +782,14 @@ command_1 = b"""
             <td class="year has-text-right">
               2022
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/ULP9"
                  title="Police Officer Amritpreet Sandhu #24256"
-                 >Sandhu, Amritpreet 
+                 >Sandhu, Amritpreet
                 &nbsp; <span class="is-hidden-mobile">#24256</span>
               </a>
             </td>
@@ -802,14 +802,14 @@ command_1 = b"""
             <td class="year has-text-right">
               2022
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/V9K3"
                  title="Lieutenant Ronaldy Ventura"
-                 >Ventura, Ronaldy 
+                 >Ventura, Ronaldy
                 &nbsp; <span class="is-hidden-mobile"></span>
               </a>
             </td>
@@ -822,7 +822,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2022
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -842,14 +842,14 @@ command_1 = b"""
             <td class="year has-text-right">
               2022
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/9UK7"
                  title="Police Officer Rafael Delacruz #23487"
-                 >Delacruz, Rafael 
+                 >Delacruz, Rafael
                 &nbsp; <span class="is-hidden-mobile">#23487</span>
               </a>
             </td>
@@ -862,14 +862,14 @@ command_1 = b"""
             <td class="year has-text-right">
               2022
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/C92P"
                  title="Police Officer Lisandro Rodriguez #9145"
-                 >Rodriguez, Lisandro 
+                 >Rodriguez, Lisandro
                 &nbsp; <span class="is-hidden-mobile">#9145</span>
               </a>
             </td>
@@ -882,7 +882,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2021
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -902,7 +902,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2021
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -922,7 +922,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2021
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -942,14 +942,14 @@ command_1 = b"""
             <td class="year has-text-right">
               2020
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/76EB"
                  title="Sergeant Robert Garcia #2393"
-                 >Garcia, Robert 
+                 >Garcia, Robert
                 &nbsp; <span class="is-hidden-mobile">#2393</span>
               </a>
             </td>
@@ -962,7 +962,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2020
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -982,14 +982,14 @@ command_1 = b"""
             <td class="year has-text-right">
               2020
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/KUHB"
                  title="Police Officer Alex Adames #1118"
-                 >Adames, Alex 
+                 >Adames, Alex
                 &nbsp; <span class="is-hidden-mobile">#1118</span>
               </a>
             </td>
@@ -1002,14 +1002,14 @@ command_1 = b"""
             <td class="year has-text-right">
               2020
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/9R6F"
                  title="Police Officer Yvener Cesar #5137"
-                 >Cesar, Yvener 
+                 >Cesar, Yvener
                 &nbsp; <span class="is-hidden-mobile">#5137</span>
               </a>
             </td>
@@ -1022,7 +1022,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2019
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1042,7 +1042,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2019
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1062,7 +1062,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2019
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1082,14 +1082,14 @@ command_1 = b"""
             <td class="year has-text-right">
               2019
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/DURZ"
                  title="Sergeant Vlad Kogan #1999"
-                 >Kogan, Vlad 
+                 >Kogan, Vlad
                 &nbsp; <span class="is-hidden-mobile">#1999</span>
               </a>
             </td>
@@ -1102,7 +1102,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2019
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1122,7 +1122,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2018
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1142,7 +1142,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2018
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1162,14 +1162,14 @@ command_1 = b"""
             <td class="year has-text-right">
               2018
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/V4AB"
                  title="Police Officer Takkeung Wong #1298"
-                 >Wong, Takkeung 
+                 >Wong, Takkeung
                 &nbsp; <span class="is-hidden-mobile">#1298</span>
               </a>
             </td>
@@ -1182,14 +1182,14 @@ command_1 = b"""
             <td class="year has-text-right">
               2018
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/QJL5"
                  title="Sergeant Magna Kamarasherif #427"
-                 >Kamarasherif, Magna 
+                 >Kamarasherif, Magna
                 &nbsp; <span class="is-hidden-mobile">#427</span>
               </a>
             </td>
@@ -1202,7 +1202,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2017
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1222,7 +1222,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2015
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1242,7 +1242,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2015
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1262,7 +1262,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2013
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1282,7 +1282,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2012
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1302,7 +1302,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2011
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1322,7 +1322,7 @@ command_1 = b"""
             <td class="year has-text-right">
               2011
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1340,9 +1340,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1360,16 +1360,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/LBBP"
                  title="Sergeant Andrews Adjei #1056"
-                 >Adjei, Andrews 
+                 >Adjei, Andrews
                 &nbsp; <span class="is-hidden-mobile">#1056</span>
               </a>
             </td>
@@ -1380,9 +1380,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1400,9 +1400,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1420,9 +1420,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1440,16 +1440,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/SK9H"
                  title="Police Officer Wael Baseluos #6796"
-                 >Baseluos, Wael 
+                 >Baseluos, Wael
                 &nbsp; <span class="is-hidden-mobile">#6796</span>
               </a>
             </td>
@@ -1460,9 +1460,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1480,9 +1480,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1500,9 +1500,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1520,9 +1520,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1540,16 +1540,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/ABWF"
                  title="Police Officer Mathew Brown #22202"
-                 >Brown, Mathew 
+                 >Brown, Mathew
                 &nbsp; <span class="is-hidden-mobile">#22202</span>
               </a>
             </td>
@@ -1560,9 +1560,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1580,9 +1580,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1600,9 +1600,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1620,9 +1620,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1640,9 +1640,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1660,16 +1660,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/U7CZ"
                  title="Police Officer Bryan Diaz #11127"
-                 >Diaz, Bryan 
+                 >Diaz, Bryan
                 &nbsp; <span class="is-hidden-mobile">#11127</span>
               </a>
             </td>
@@ -1680,9 +1680,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1700,9 +1700,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1720,9 +1720,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1740,16 +1740,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/334R"
                  title="Police Officer Rafael Espino #31805"
-                 >Espino, Rafael 
+                 >Espino, Rafael
                 &nbsp; <span class="is-hidden-mobile">#31805</span>
               </a>
             </td>
@@ -1760,16 +1760,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/LH7T"
                  title="Sergeant Woodley Etienne #2660"
-                 >Etienne, Woodley 
+                 >Etienne, Woodley
                 &nbsp; <span class="is-hidden-mobile">#2660</span>
               </a>
             </td>
@@ -1780,9 +1780,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1800,9 +1800,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1820,9 +1820,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1840,9 +1840,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1860,9 +1860,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1880,9 +1880,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1900,9 +1900,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1920,9 +1920,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1940,9 +1940,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -1960,16 +1960,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/H4M5"
                  title="Police Officer Tabatha Jehhar #17060"
-                 >Jehhar, Tabatha 
+                 >Jehhar, Tabatha
                 &nbsp; <span class="is-hidden-mobile">#17060</span>
               </a>
             </td>
@@ -1980,9 +1980,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2000,9 +2000,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2020,16 +2020,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/E6UH"
                  title="Sergeant Joel Kwok #3823"
-                 >Kwok, Joel 
+                 >Kwok, Joel
                 &nbsp; <span class="is-hidden-mobile">#3823</span>
               </a>
             </td>
@@ -2040,16 +2040,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/QUFR"
                  title="Sergeant Zijian Lao #2546"
-                 >Lao, Zijian 
+                 >Lao, Zijian
                 &nbsp; <span class="is-hidden-mobile">#2546</span>
               </a>
             </td>
@@ -2060,9 +2060,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2080,16 +2080,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/69LR"
                  title="Police Officer Angelina Lebronsantiago #1631"
-                 >Lebronsantiago, Angelina 
+                 >Lebronsantiago, Angelina
                 &nbsp; <span class="is-hidden-mobile">#1631</span>
               </a>
             </td>
@@ -2100,9 +2100,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2120,9 +2120,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2140,9 +2140,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2160,9 +2160,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2180,9 +2180,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2200,9 +2200,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2220,9 +2220,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2240,9 +2240,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2260,9 +2260,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2280,16 +2280,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/FNEZ"
                  title="Police Officer Jhonstyn Menasanchez #7764"
-                 >Menasanchez, Jhonstyn 
+                 >Menasanchez, Jhonstyn
                 &nbsp; <span class="is-hidden-mobile">#7764</span>
               </a>
             </td>
@@ -2300,9 +2300,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2320,9 +2320,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2340,9 +2340,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2360,16 +2360,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/F49R"
                  title="Police Officer Julie Ng #533"
-                 >Ng, Julie 
+                 >Ng, Julie
                 &nbsp; <span class="is-hidden-mobile">#533</span>
               </a>
             </td>
@@ -2380,9 +2380,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2400,9 +2400,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2420,9 +2420,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2440,9 +2440,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2460,9 +2460,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2480,9 +2480,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2500,16 +2500,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/MZ6H"
                  title="Police Officer Mariolys Ramirezrosario #9762"
-                 >Ramirezrosario, Mariolys 
+                 >Ramirezrosario, Mariolys
                 &nbsp; <span class="is-hidden-mobile">#9762</span>
               </a>
             </td>
@@ -2520,9 +2520,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2540,9 +2540,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2560,9 +2560,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2580,9 +2580,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2600,9 +2600,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2620,9 +2620,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2640,9 +2640,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2660,9 +2660,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2680,16 +2680,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/CDKC"
                  title="Police Officer Ivette Serrano #979"
-                 >Serrano, Ivette 
+                 >Serrano, Ivette
                 &nbsp; <span class="is-hidden-mobile">#979</span>
               </a>
             </td>
@@ -2700,9 +2700,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2720,16 +2720,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/4CZD"
                  title="Police Officer John Siomkos #18465"
-                 >Siomkos, John 
+                 >Siomkos, John
                 &nbsp; <span class="is-hidden-mobile">#18465</span>
               </a>
             </td>
@@ -2740,9 +2740,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2760,9 +2760,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2780,9 +2780,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2800,9 +2800,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2820,9 +2820,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
@@ -2840,16 +2840,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/NEX5"
                  title="Police Officer Diego Valdovinosvaldovinos #1936"
-                 >Valdovinosvaldovinos, Diego 
+                 >Valdovinosvaldovinos, Diego
                 &nbsp; <span class="is-hidden-mobile">#1936</span>
               </a>
             </td>
@@ -2860,16 +2860,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/426H"
                  title="Police Officer Brian Vasquez #10701"
-                 >Vasquez, Brian 
+                 >Vasquez, Brian
                 &nbsp; <span class="is-hidden-mobile">#10701</span>
               </a>
             </td>
@@ -2880,16 +2880,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/DVS7"
                  title="Police Officer Anthony Wan #7268"
-                 >Wan, Anthony 
+                 >Wan, Anthony
                 &nbsp; <span class="is-hidden-mobile">#7268</span>
               </a>
             </td>
@@ -2900,16 +2900,16 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
           <tr>
             <td class="officer">
               <a class="name"
                  href="/officer/VHVM"
                  title="Police Officer Xiqian Yang #3067"
-                 >Yang, Xiqian 
+                 >Yang, Xiqian
                 &nbsp; <span class="is-hidden-mobile">#3067</span>
               </a>
             </td>
@@ -2920,9 +2920,9 @@ command_1 = b"""
               0
             </td>
             <td class="year has-text-right">
-              
+
             </td>
-            
+
           </tr>
         </tbody>
       </table>

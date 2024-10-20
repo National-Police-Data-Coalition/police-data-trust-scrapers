@@ -1,21 +1,22 @@
 """Enumerations shared across multiple models are defined here."""
+
 from enum import Enum
 
 
 class Gender(str, Enum):
-    OTHER = 'Other'
-    MALE = 'Male'
-    FEMALE = 'Female'
+    OTHER = "Other"
+    MALE = "Male"
+    FEMALE = "Female"
 
 
 class Ethnicity(str, Enum):
-    UNKNOWN = 'Unknown'
-    WHITE = 'White'
-    BLACK_AFRICAN_AMERICAN = 'Black/African American'
-    AMERICAN_INDIAN_ALASKA_NATIVE = 'American Indian/Alaska Native'
-    ASIAN = 'Asian'
-    NATIVE_HAWAIIAN_PACIFIC_ISLANDER = 'Native Hawaiian/Pacific Islander'
-    HISPANIC_LATINO = 'Hispanic/Latino'
+    UNKNOWN = "Unknown"
+    WHITE = "White"
+    BLACK_AFRICAN_AMERICAN = "Black/African American"
+    AMERICAN_INDIAN_ALASKA_NATIVE = "American Indian/Alaska Native"
+    ASIAN = "Asian"
+    NATIVE_HAWAIIAN_PACIFIC_ISLANDER = "Native Hawaiian/Pacific Islander"
+    HISPANIC_LATINO = "Hispanic/Latino"
 
 
 class State(str, Enum):
