@@ -8,4 +8,4 @@ class BaseItem:
     model: str
     data: dict
     scraped_at: datetime = datetime.now(UTC)
-    source: str = "Fifty-A.org"
+    source: str = "50-a.org"

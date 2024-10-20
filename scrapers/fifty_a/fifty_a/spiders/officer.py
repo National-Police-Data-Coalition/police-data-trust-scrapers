@@ -137,7 +137,7 @@ class OfficerSpider(CrawlSpider):
             parts = description.split()
             if len(parts) >= 2:
                 ethnicity = parts[0]
-                gender = parts[1]
+                gender = parts[1].strip(",")
                 return ethnicity, gender
         return None, None
 
