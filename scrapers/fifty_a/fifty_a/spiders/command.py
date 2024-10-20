@@ -3,8 +3,8 @@ import random
 import logging
 import scrapy
 
-from scrapers.fifty_a.fifty_a.items import CommandItem
 from models.agencies import CreateUnit
+from scrapers.fifty_a.fifty_a.items import CommandItem
 
 
 class CommandSpider(scrapy.Spider):
@@ -27,7 +27,8 @@ class CommandSpider(scrapy.Spider):
             yield response.follow(command, self.parse_command)
 
     def parse_command(self, response):
-        description_set = [desc.strip() for desc in response.css("div.intro p::text").getall() if desc.strip()]
+        description_set = [desc.strip() for desc in response.css(
+            "div.intro p::text").getall() if desc.strip()]
         try:
             desc = description_set[-1]
         except IndexError:
@@ -40,23 +41,32 @@ class CommandSpider(scrapy.Spider):
             address_data = self.parse_address(address)
 
         command_data = {k: v for k, v in {
-            "name": response.css("h1.title.command::text").get().strip(),  # Extract the unit name from the h1 tag
-            "website_url": response.css("div.links a[href*='nypd']::attr(href)").get(),  # Extract the website URL, assuming it contains 'nypd'
-            "phone": response.css("div.links p::text").re_first(r"\(\d{3}\) \d{3}-\d{4}"),  # Extract the phone number
+            "name": response.css("h1.title.command::text").get().strip(),
+            "website_url": response.css(
+                "div.links a[href*='nypd']::attr(href)").get(),
+            "phone": response.css(
+                "div.links p::text").re_first(r"\(\d{3}\) \d{3}-\d{4}"),
             "description": desc,
             "address": address_data.get("street"),
             "city": address_data.get("city"),
             "state": address_data.get("state"),
             "zip": address_data.get("zip_code"),
-            "commander_uid": response.css("div.intro a[href*='/officer/']::attr(href)").get(),
+            "commander_uid": response.css(
+                "div.intro a[href*='/officer/']::attr(href)").get(),
         }.items() if v is not None}
 
         try:
             unit = CreateUnit(**command_data)
-            yield unit.model_dump()
         except ValueError as e:
-            logging.error(f"Validation error for unit {command_data['name']}: {e}")
+            logging.error(
+                f"Validation error for unit {command_data['name']}: {e}")
             return None
+
+        yield CommandItem(
+            url=response.url,
+            model="unit",
+            data=unit.model_dump()
+        )
 
     def parse_address(self, address):
         """Parse the address into its components:

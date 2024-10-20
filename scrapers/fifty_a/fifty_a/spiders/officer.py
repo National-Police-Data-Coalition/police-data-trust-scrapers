@@ -2,7 +2,7 @@ import re
 import random
 import logging
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
@@ -68,14 +68,12 @@ class OfficerSpider(CrawlSpider):
 
         rank = response.css("span.rank::text").get()
 
+        command_info = response.css("div.command::text").get()
+        logging.info(f"Command Info: {command_info}")
+        since_date = response.css("div.command::text").re(r'since\s+(.*)')
         service_info = response.css("div.service::text").get()
         service_start = re.search(r"started (\w+ \d{4})", service_info)
         service_start = service_start.group(1) if service_start else None
-
-        scrap_data = {
-            "url": response.url,
-            "scraped_at": datetime.now().isoformat(),
-        }
 
         officer_data = {
             "first_name": name_parts.get("first_name"),
@@ -87,12 +85,36 @@ class OfficerSpider(CrawlSpider):
             "state_ids": [state_id] if state_id else None
         }
 
+        employment_history = []
+
+        employment_history.append({
+            'earliest_date': since_date,
+            'latest_date': datetime.now().strftime("%B %Y"),
+            'badge_number': response.css("span.badge::text").get(),
+            'highest_rank': rank,
+            'unit_uid': response.css("div.command a.command::attr(href)").get()
+        })
+
+        prev_employment = response.css(
+            "div.commandhistory a::attr(href)").getall()
+        for emp in prev_employment:
+            employment_history.append({
+                'unit_uid': emp
+            })
+
         try:
             officer = CreateOfficer(**officer_data)
-            yield officer.model_dump()
         except ValueError as e:
             logging.error(f"Validation error for officer {name}: {e}")
             return None
+
+        yield OfficerItem(
+            url=response.url,
+            model="officer",
+            data=officer.model_dump(),
+            employment=employment_history,
+            service_start=service_start
+        )
 
     @staticmethod
     def parse_name(name):
