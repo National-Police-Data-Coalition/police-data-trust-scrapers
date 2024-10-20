@@ -36,7 +36,7 @@ class OfficerSpider(CrawlSpider):
     def parse_start_url(self, response):
         commands = response.css("a.command::attr(href)").getall()
         if self.test_mode and commands:
-            selected_command = random.choice(commands)
+            selected_command = random.choice(commands)  # nosec
             yield response.follow(selected_command, self.parse_command)
         elif not self.test_mode:
             for command in commands:
@@ -47,7 +47,7 @@ class OfficerSpider(CrawlSpider):
         logging.info(f"Found {len(officer_links)} officers in {response.url}")
 
         if self.test_mode:
-            random.shuffle(officer_links)
+            random.shuffle(officer_links)  # nosec
             officer_links = officer_links[: self.max_officers]
 
         for officer_link in officer_links:

@@ -22,7 +22,7 @@ class CommandSpider(scrapy.Spider):
         commands = response.css("a.command::attr(href)").getall()
         logging.info(f"Found {len(commands)} units.")
         if self.test_mode and commands:
-            random.shuffle(commands)
+            random.shuffle(commands)  # nosec
             commands = commands[: self.max_units]
         for command in commands:
             yield response.follow(command, self.parse_command)
