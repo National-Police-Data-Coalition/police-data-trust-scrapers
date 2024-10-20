@@ -6,16 +6,10 @@ from scrapers.common.base_item import BaseItem
 
 @dataclass
 class CommandItem(BaseItem):
-    name: str
-    url: str
+    pass
 
 
 @dataclass
 class OfficerItem(BaseItem):
-    url: str
-    name: str
-    badge: str
-    race: str
-    gender: str
-    complaints: List[dict]
-    age: str
+    employment: List[dict] = None
+    service_start: str = None
