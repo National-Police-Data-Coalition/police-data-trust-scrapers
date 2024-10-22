@@ -10,7 +10,7 @@ from scrapy.spiders import CrawlSpider, Rule
 from models.enums import Ethnicity
 from models.officers import CreateOfficer, StateId
 from scrapers.common.parse import parse_string_to_number
-from scrapers.fifty_a.fifty_a.items import OfficerItem
+from scrapers.fifty_a.fifty_a.items import OfficerItem, AGENCY_UID
 
 
 class OfficerSpider(CrawlSpider):
@@ -93,12 +93,16 @@ class OfficerSpider(CrawlSpider):
                 "badge_number": response.css("span.badge::text").get(),
                 "highest_rank": rank,
                 "unit_uid": response.css("div.command a.command::attr(href)").get(),
+                "agency_uid": AGENCY_UID,
             }
         )
 
         prev_employment = response.css("div.commandhistory a::attr(href)").getall()
         for emp in prev_employment:
-            employment_history.append({"unit_uid": emp})
+            employment_history.append({
+                "unit_uid": emp,
+                "agency_uid": AGENCY_UID
+            })
 
         try:
             officer = CreateOfficer(**officer_data)
@@ -142,14 +146,14 @@ class OfficerSpider(CrawlSpider):
     @staticmethod
     def map_ethnicity(ethnicity):
         if not ethnicity:
-            return Ethnicity.UNKNOWN
+            return None
 
         ethnicity_mapping = {
             "black": Ethnicity.BLACK_AFRICAN_AMERICAN,
             "white": Ethnicity.WHITE,
             "asian": Ethnicity.ASIAN,
             "hispanic": Ethnicity.HISPANIC_LATINO,
-            "american indian": Ethnicity.AMERICAN_INDIAN_ALASKA_NATIVE,
+            "native american": Ethnicity.AMERICAN_INDIAN_ALASKA_NATIVE,
             "native hawaiian": Ethnicity.NATIVE_HAWAIIAN_PACIFIC_ISLANDER,
         }
 
@@ -157,7 +161,7 @@ class OfficerSpider(CrawlSpider):
             if key in ethnicity.lower():
                 return value
 
-        return Ethnicity.UNKNOWN
+        return None
 
     @staticmethod
     def parse_complaints(response) -> List[Optional[Dict[str, Any]]]:
