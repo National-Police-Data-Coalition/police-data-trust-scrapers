@@ -10,7 +10,7 @@ from scrapy.spiders import CrawlSpider, Rule
 from models.enums import Ethnicity
 from models.officers import CreateOfficer, StateId
 from scrapers.common.parse import parse_string_to_number
-from scrapers.fifty_a.fifty_a.items import OfficerItem, AGENCY_UID
+from scrapers.fifty_a.fifty_a.items import AGENCY_UID, OfficerItem
 
 
 class OfficerSpider(CrawlSpider):
@@ -99,10 +99,7 @@ class OfficerSpider(CrawlSpider):
 
         prev_employment = response.css("div.commandhistory a::attr(href)").getall()
         for emp in prev_employment:
-            employment_history.append({
-                "unit_uid": emp,
-                "agency_uid": AGENCY_UID
-            })
+            employment_history.append({"unit_uid": emp, "agency_uid": AGENCY_UID})
 
         try:
             officer = CreateOfficer(**officer_data)
