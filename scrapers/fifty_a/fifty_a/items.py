@@ -3,19 +3,16 @@ from typing import List
 
 from scrapers.common.base_item import BaseItem
 
+AGENCY_UID = "54485f3cbe3e49229e3d091f0d12e882"
+
 
 @dataclass
 class CommandItem(BaseItem):
-    name: str
-    url: str
+    agency: str = AGENCY_UID
+    pass
 
 
 @dataclass
 class OfficerItem(BaseItem):
-    url: str
-    name: str
-    badge: str
-    race: str
-    gender: str
-    complaints: List[dict]
-    age: str
+    employment: List[dict] = None
+    service_start: str = None

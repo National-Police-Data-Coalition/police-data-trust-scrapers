@@ -14,7 +14,7 @@ NEWSPIDER_MODULE = "fifty_a.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-# USER_AGENT = "fifty_a (+http://www.yourdomain.com)"
+USER_AGENT = "NPDI/2.0 (+http://www.nationalpolicedata.org)"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -68,9 +68,9 @@ DOWNLOAD_DELAY = 1
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
-# AUTOTHROTTLE_ENABLED = True
+AUTOTHROTTLE_ENABLED = True
 # The initial download delay
-# AUTOTHROTTLE_START_DELAY = 5
+AUTOTHROTTLE_START_DELAY = 3
 # The maximum download delay to be set in case of high latencies
 # AUTOTHROTTLE_MAX_DELAY = 60
 # The average number of requests Scrapy should be sending in parallel to
