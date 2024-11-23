@@ -1,16 +1,16 @@
 import logging
 import random
 import re
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any, Dict, List, Optional
 
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 
-from models.enums import Ethnicity
 from models.officers import CreateOfficer, StateId
 from scrapers.common.parse import parse_string_to_number
 from scrapers.fifty_a.fifty_a.items import AGENCY_UID, OfficerItem
+from scrapers.fifty_a.fifty_a.utils import get_demographics
 
 
 class OfficerSpider(CrawlSpider):
@@ -58,7 +58,7 @@ class OfficerSpider(CrawlSpider):
         name = response.css("h1.title.name::text").get()
         name_parts = self.parse_name(name)
         description = response.css("span.desc::text").get()
-        ethnicity, gender = self.parse_description(description)
+        demo_data = get_demographics(description)
 
         tax_id = response.css("span.taxid::text").re_first(r"Tax #(\d+)")
         state_id = (
@@ -69,7 +69,7 @@ class OfficerSpider(CrawlSpider):
 
         command_info = response.css("div.command::text").get()
         logging.info(f"Command Info: {command_info}")
-        since_date = response.css("div.command::text").re(r"since\s+(.*)")
+        since_date = response.css("div.command::text").re(r"since\s+(.*)")[0]
         service_info = response.css("div.service::text").get()
         service_start = re.search(r"started (\w+ \d{4})", service_info)
         service_start = service_start.group(1) if service_start else None
@@ -79,17 +79,16 @@ class OfficerSpider(CrawlSpider):
             "middle_name": name_parts.get("middle_name"),
             "last_name": name_parts.get("last_name"),
             "suffix": name_parts.get("suffix"),
-            "ethnicity": self.map_ethnicity(ethnicity),
-            "gender": gender,
+            "ethnicity": demo_data.get("ethnicity", None),
+            "gender": demo_data.get("gender", None),
+            "date_of_birth": self.estimate_dob(demo_data.get("age", None)),
             "state_ids": [state_id] if state_id else None,
         }
 
         employment_history = []
-
         employment_history.append(
             {
                 "earliest_date": since_date,
-                "latest_date": datetime.now().strftime("%B %Y"),
                 "badge_number": response.css("span.badge::text").get(),
                 "highest_rank": rank,
                 "unit_uid": response.css("div.command a.command::attr(href)").get(),
@@ -99,7 +98,9 @@ class OfficerSpider(CrawlSpider):
 
         prev_employment = response.css("div.commandhistory a::attr(href)").getall()
         for emp in prev_employment:
-            employment_history.append({"unit_uid": emp, "agency_uid": AGENCY_UID})
+            employment_history.append(
+                {"unit_uid": emp, "agency_uid": AGENCY_UID, "latest_date": since_date}
+            )
 
         try:
             officer = CreateOfficer(**officer_data)
@@ -113,6 +114,7 @@ class OfficerSpider(CrawlSpider):
             data=officer.model_dump(),
             employment=employment_history,
             service_start=service_start,
+            scraped_at=datetime.now(UTC),
         )
 
     @staticmethod
@@ -131,36 +133,6 @@ class OfficerSpider(CrawlSpider):
         return result
 
     @staticmethod
-    def parse_description(description):
-        if description:
-            parts = description.split()
-            if len(parts) >= 2:
-                ethnicity = parts[0]
-                gender = parts[1].strip(",")
-                return ethnicity, gender
-        return None, None
-
-    @staticmethod
-    def map_ethnicity(ethnicity):
-        if not ethnicity:
-            return None
-
-        ethnicity_mapping = {
-            "black": Ethnicity.BLACK_AFRICAN_AMERICAN,
-            "white": Ethnicity.WHITE,
-            "asian": Ethnicity.ASIAN,
-            "hispanic": Ethnicity.HISPANIC_LATINO,
-            "native american": Ethnicity.AMERICAN_INDIAN_ALASKA_NATIVE,
-            "native hawaiian": Ethnicity.NATIVE_HAWAIIAN_PACIFIC_ISLANDER,
-        }
-
-        for key, value in ethnicity_mapping.items():
-            if key in ethnicity.lower():
-                return value
-
-        return None
-
-    @staticmethod
     def parse_complaints(response) -> List[Optional[Dict[str, Any]]]:
         complaints = []
         for i in ["complaints", "allegations", "substantiated"]:
@@ -176,3 +148,13 @@ class OfficerSpider(CrawlSpider):
                 name = disp.css(".name::text").get()
                 complaints.append({"name": name, "count": count_parsed})
         return complaints
+
+    @staticmethod
+    def estimate_dob(age):
+        if age is None:
+            return None
+
+        today = datetime.today()
+        birth_year = today.year - age
+        dob = today.replace(year=birth_year)
+        return dob.strftime("%Y-%m-%d")
