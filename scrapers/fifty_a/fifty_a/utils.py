@@ -103,6 +103,11 @@ def convert_str_to_date(date_string):
         pass
 
     try:
+        return datetime.strptime(date_string, "%m/%d/%Y").date()
+    except ValueError:
+        pass
+
+    try:
         return datetime.strptime(date_string, "%B %d, %Y").date()
     except ValueError:
         logging.error(f"Invalid date format: {date_string}")

@@ -28,6 +28,11 @@ class ComplaintItem(FiftyAItem):
 
 
 @dataclass
+class LitigationItem(FiftyAItem):
+    pass
+
+
+@dataclass
 class CommandItem(FiftyAItem):
     agency: str = AGENCY_UID
     pass
@@ -36,5 +41,4 @@ class CommandItem(FiftyAItem):
 @dataclass
 class OfficerItem(FiftyAItem):
     employment: List[dict] = None
-    litigation: List[dict] = None
     service_start: str = None

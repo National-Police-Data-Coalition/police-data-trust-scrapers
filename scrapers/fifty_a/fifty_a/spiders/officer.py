@@ -8,11 +8,12 @@ from scrapy import Request
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 
+from models.common import Article, Attachemnt
 from models.litigation import CreateLitigation
 from models.officers import CreateOfficer, StateId
 from scrapers.common.parse import parse_string_to_number
-from scrapers.fifty_a.fifty_a.items import AGENCY_UID, OfficerItem
-from scrapers.fifty_a.fifty_a.utils import get_demographics
+from scrapers.fifty_a.fifty_a.items import AGENCY_UID, LitigationItem, OfficerItem
+from scrapers.fifty_a.fifty_a.utils import convert_str_to_date, get_demographics
 
 
 class OfficerSpider(CrawlSpider):
@@ -84,8 +85,11 @@ class OfficerSpider(CrawlSpider):
         service_start = re.search(r"started (\w+ \d{4})", service_info)
         service_start = service_start.group(1) if service_start else None
 
-        # Parse Litigation Data
-        litigation = self.parse_litigation(response)
+        # Parse News Articles
+        articles = self.parse_articles(response)
+
+        # Parse Attachments
+        attachments = self.parse_attachments(response)
 
         officer_data = {
             "first_name": name_parts.get("first_name"),
@@ -96,6 +100,8 @@ class OfficerSpider(CrawlSpider):
             "gender": demo_data.get("gender", None),
             "date_of_birth": self.estimate_dob(demo_data.get("age", None)),
             "state_ids": [state_id] if state_id else None,
+            "articles": articles,
+            "attachments": attachments,
         }
 
         employment_history = []
@@ -126,10 +132,12 @@ class OfficerSpider(CrawlSpider):
             model="officer",
             data=officer.model_dump(),
             employment=employment_history,
-            litigation=[lit.model_dump() for lit in litigation] if litigation else None,
             service_start=service_start,
             scraped_at=datetime.now(UTC),
         )
+
+        # Yield Litigation Items
+        yield from self.parse_litigation(response)
 
     def parse_litigation(self, response) -> List[CreateLitigation]:
         container = response.css("div.lawsuits-details")
@@ -141,7 +149,6 @@ class OfficerSpider(CrawlSpider):
         # Adjusted regex for splitting on double <br>
         parts = re.split(r"<br\s*>\s*<br\s*>", lawsuits_html)
 
-        litigations = []
         for block in parts:
             block_links = re.findall(r"<a\s+(.*?)>(.*?)</a>", block, re.DOTALL)
 
@@ -188,17 +195,18 @@ class OfficerSpider(CrawlSpider):
             if len(lines) > 2:
                 court_line = lines[2]
                 parts_court = [p.strip() for p in court_line.split(",") if p.strip()]
-                if len(parts_court) >= 3:
-                    # Extract court_name and jurisdiction
-                    court_info = parts_court[0]
-                    if " - " in court_info:
-                        jurisdiction = court_info.split(" - ")[-1]
-                        court_name = court_info
-                        jurisdiction = jurisdiction.strip()
-                    else:
-                        court_name = court_info
-                        jurisdiction = None
 
+                # Extract court_name and jurisdiction
+                court_info = parts_court[0]
+                if " - " in court_info:
+                    jurisdiction = court_info.split(" - ")[-1]
+                    court_name = court_info
+                    jurisdiction = jurisdiction.strip()
+                else:
+                    court_name = court_info
+                    jurisdiction = None
+
+                if len(parts_court) >= 3:
                     # start_date is formed from parts_court[1] and parts_court[2]
                     # e.g. "May 18" and "2015" -> "May 18, 2015"
                     start_date_month_day = parts_court[1].strip()  # "May 18"
@@ -306,17 +314,102 @@ class OfficerSpider(CrawlSpider):
                 jurisdiction=jurisdiction,
                 state=state,
                 description=description,
-                start_date=start_date,
-                end_date=end_date,
+                start_date=convert_str_to_date(start_date),
+                end_date=convert_str_to_date(end_date),
                 settlement_amount=settlement_amount,
                 url=url,
                 documents=documents if documents else None,
                 defendants=defendants,
             )
 
-            litigations.append(litigation)
+            yield LitigationItem(
+                url=response.url,
+                model="litigation",
+                data=litigation.model_dump(),
+                scraped_at=datetime.now(UTC),
+            )
 
-        return litigations
+    def parse_articles(self, response) -> List[Article]:
+        articles = []
+        news_container = response.css("div.news")
+        if not news_container:
+            return articles
+        article_links = news_container.css(
+            "a:not([class])"
+        )  # exclude any a with class like 'document'
+
+        for link in article_links:
+            url = link.attrib.get("href")
+            title = link.css("::text").get()
+
+            # Get the text after the <a> tag.
+            trailing_text = link.xpath("./following-sibling::text()[1]").get()
+
+            # trailing_text might look like: ", The Intercept, 9/25/2023"
+            # Let's clean and split it by commas
+            if trailing_text:
+                parts = [
+                    part.strip() for part in trailing_text.split(",") if part.strip()
+                ]
+
+                # After splitting and cleaning:
+                # parts[0] -> publisher
+                # parts[1] -> publication_date
+                if len(parts) >= 2:
+                    publisher = parts[0]
+                    publication_date = parts[1]
+                else:
+                    # If there's not enough parts, fallback to None
+                    publisher = None
+                    publication_date = None
+            else:
+                publisher = None
+                publication_date = None
+
+            if url and title and publisher and publication_date:
+                articles.append(
+                    Article(
+                        url=url,
+                        title=title,
+                        publisher=publisher,
+                        publication_date=convert_str_to_date(publication_date),
+                    )
+                )
+
+        return articles
+
+    def parse_attachments(self, response) -> List[Attachemnt]:
+        attachments = []
+        container = response.css("div.other-documents")
+        if not container:
+            return attachments
+
+        doc_divs = container.css("div.document")
+        for doc_div in doc_divs:
+            link = doc_div.css("a")
+            if not link:
+                continue
+
+            url = link.attrib.get("href")
+            title = link.css("::text").get()
+
+            # Get any trailing text in this div after the link to form a description
+            trailing_texts = link.xpath("./following-sibling::text()").getall()
+            description = (
+                " ".join(t.strip() for t in trailing_texts if t.strip()) or None
+            )
+
+            # Guess the type from URL (if it ends with .pdf or contains .pdf)
+            doc_type = "document"
+            if url and ".pdf" in url.lower():
+                doc_type = "pdf"
+
+            attachment = Attachemnt(
+                type=doc_type, url=url, title=title, description=description
+            )
+            attachments.append(attachment)
+
+        return attachments
 
     @staticmethod
     def parse_name(name):
@@ -357,5 +450,5 @@ class OfficerSpider(CrawlSpider):
 
         today = datetime.today()
         birth_year = today.year - age
-        dob = today.replace(year=birth_year)
-        return dob.strftime("%Y-%m-%d")
+        dob = today.replace(year=birth_year).date()
+        return dob

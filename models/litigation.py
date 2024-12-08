@@ -1,3 +1,4 @@
+from datetime import date
 from typing import List, Optional
 
 from pydantic import BaseModel, Field
@@ -42,10 +43,10 @@ class CreateLitigation(BaseModel):
         None,
         description="A description of the litigation. This could include a summary of the case, the legal issues involved, or other relevant information.",
     )
-    start_date: Optional[str] = Field(
+    start_date: Optional[date] = Field(
         None, description="The date when this litigation was filed or initiated."
     )
-    end_date: Optional[str] = Field(
+    end_date: Optional[date] = Field(
         None, description="The date when this court rendered its judgement."
     )
     dispositions: Optional[List[Disposition]] = Field(

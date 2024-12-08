@@ -1,10 +1,11 @@
+from datetime import date
 from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
 from models.enums import Ethnicity, Gender
 
-from .common import PaginatedResponse
+from .common import Article, Attachemnt, PaginatedResponse
 
 
 class StateId(BaseModel):
@@ -150,11 +151,17 @@ class CreateOfficer(BaseOfficer, BaseModel):
         None, description="The ethnicity of the officer"
     )
     gender: Optional[Gender] = Field(None, description="The gender of the officer")
-    date_of_birth: Optional[str] = Field(
+    date_of_birth: Optional[date] = Field(
         None, description="The date of birth of the officer"
     )
     state_ids: Optional[List[StateId]] = Field(
         None, description="The state ids of the officer"
+    )
+    articles: Optional[List[Article]] = Field(
+        None, description="News articles that reference the officer."
+    )
+    attachments: Optional[List[Attachemnt]] = Field(
+        None, description="Documents and files related to the officer."
     )
 
 

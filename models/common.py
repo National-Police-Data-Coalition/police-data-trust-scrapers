@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Optional
 
 from pydantic import BaseModel, Field
@@ -16,7 +17,7 @@ class Article(BaseModel):
     url: Optional[str] = Field(None, description="The URL of the article.")
     title: Optional[str] = Field(None, description="The title of the article.")
     publisher: Optional[str] = Field(None, description="The publisher of the article.")
-    publication_date: Optional[str] = Field(
+    publication_date: Optional[date] = Field(
         None, description="The date of publication of the article."
     )
 
