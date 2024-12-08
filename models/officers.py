@@ -2,6 +2,8 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
+from models.enums import Ethnicity, Gender
+
 from .common import PaginatedResponse
 
 
@@ -127,8 +129,10 @@ class BaseOfficer(BaseModel):
     middle_name: Optional[str] = Field(None, description="Middle name of the officer")
     last_name: Optional[str] = Field(None, description="Last name of the officer")
     suffix: Optional[str] = Field(None, description="Suffix of the officer's name")
-    ethnicity: Optional[str] = Field(None, description="The ethnicity of the officer")
-    gender: Optional[str] = Field(None, description="The gender of the officer")
+    ethnicity: Optional[Ethnicity] = Field(
+        None, description="The ethnicity of the officer"
+    )
+    gender: Optional[Gender] = Field(None, description="The gender of the officer")
     date_of_birth: Optional[str] = Field(
         None, description="The date of birth of the officer"
     )
@@ -142,8 +146,10 @@ class CreateOfficer(BaseOfficer, BaseModel):
     middle_name: Optional[str] = Field(None, description="Middle name of the officer")
     last_name: Optional[str] = Field(None, description="Last name of the officer")
     suffix: Optional[str] = Field(None, description="Suffix of the officer's name")
-    ethnicity: Optional[str] = Field(None, description="The ethnicity of the officer")
-    gender: Optional[str] = Field(None, description="The gender of the officer")
+    ethnicity: Optional[Ethnicity] = Field(
+        None, description="The ethnicity of the officer"
+    )
+    gender: Optional[Gender] = Field(None, description="The gender of the officer")
     date_of_birth: Optional[str] = Field(
         None, description="The date of birth of the officer"
     )
@@ -157,8 +163,10 @@ class UpdateOfficer(BaseOfficer, BaseModel):
     middle_name: Optional[str] = Field(None, description="Middle name of the officer")
     last_name: Optional[str] = Field(None, description="Last name of the officer")
     suffix: Optional[str] = Field(None, description="Suffix of the officer's name")
-    ethnicity: Optional[str] = Field(None, description="The ethnicity of the officer")
-    gender: Optional[str] = Field(None, description="The gender of the officer")
+    ethnicity: Optional[Ethnicity] = Field(
+        None, description="The ethnicity of the officer"
+    )
+    gender: Optional[Gender] = Field(None, description="The gender of the officer")
     date_of_birth: Optional[str] = Field(
         None, description="The date of birth of the officer"
     )
@@ -172,8 +180,10 @@ class Officer(BaseOfficer, BaseModel):
     middle_name: Optional[str] = Field(None, description="Middle name of the officer")
     last_name: Optional[str] = Field(None, description="Last name of the officer")
     suffix: Optional[str] = Field(None, description="Suffix of the officer's name")
-    ethnicity: Optional[str] = Field(None, description="The ethnicity of the officer")
-    gender: Optional[str] = Field(None, description="The gender of the officer")
+    ethnicity: Optional[Ethnicity] = Field(
+        None, description="The ethnicity of the officer"
+    )
+    gender: Optional[Gender] = Field(None, description="The gender of the officer")
     date_of_birth: Optional[str] = Field(
         None, description="The date of birth of the officer"
     )

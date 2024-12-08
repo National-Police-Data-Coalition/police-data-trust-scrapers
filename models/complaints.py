@@ -1,6 +1,10 @@
+from datetime import date
 from typing import Any, Dict, List, Literal, Optional, Union
 
 from pydantic import BaseModel, Field
+
+from models.common import Attachemnt
+from models.enums import Ethnicity, Gender
 
 
 class Location(BaseModel):
@@ -33,10 +37,10 @@ class Location(BaseModel):
 class Civilian(BaseModel):
     age: Optional[int] = Field(None, description="Estimated age of the individual.")
     age_range: Optional[str] = Field(None, description="Age range of the individual.")
-    ethnicity: Optional[str] = Field(
+    ethnicity: Optional[Ethnicity] = Field(
         None, description="The ethnicity of the individual."
     )
-    gender: Optional[str] = Field(None, description="The gender of the individual.")
+    gender: Optional[Gender] = Field(None, description="The gender of the individual.")
 
 
 class BaseAllegation(BaseModel):
@@ -116,7 +120,7 @@ class CreatePenalty(BaseModel):
         None, description="The agency's disposition."
     )
     penalty: Optional[str] = Field(None, description="A description of the penalty.")
-    date_assesed: Optional[str] = Field(
+    date_assesed: Optional[date] = Field(
         None, description="The date that the penalty was assessed."
     )
 
@@ -155,15 +159,6 @@ class ReviewBoard(BaseModel):
     )
     url: Optional[str] = Field(
         None, description="The website URL for the review board."
-    )
-
-
-class Attachemnt(BaseModel):
-    type: Optional[str] = Field(None, description="The filetype of attachment.")
-    url: Optional[str] = Field(None, description="The URL of the attachment.")
-    title: Optional[str] = Field(None, description="The title of the attachment.")
-    description: Optional[str] = Field(
-        None, description="A description of the attachment."
     )
 
 
@@ -236,15 +231,15 @@ class CreateComplaint(BaseModel):
         discriminator="record_type",
     )
     category: Optional[str] = Field(None, description="The category of the complaint.")
-    incident_date: Optional[str] = Field(
+    incident_date: Optional[date] = Field(
         None, description="The date and time the incident occurred."
     )
-    received_date: Optional[str] = Field(
+    received_date: Optional[date] = Field(
         None,
         description="The date and time the complaint was received "
         "by the reporting source.",
     )
-    closed_date: Optional[str] = Field(
+    closed_date: Optional[date] = Field(
         None, description="The date and time the complaint was closed."
     )
     location: Optional[Dict[str, Any]] = None

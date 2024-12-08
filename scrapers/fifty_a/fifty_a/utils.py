@@ -1,4 +1,6 @@
+import logging
 import re
+from datetime import datetime
 
 from models.enums import Ethnicity
 
@@ -74,3 +76,34 @@ def get_demographics(demo_text):
                 # Age is not available or in an unexpected format
                 demo["age"] = None
     return demo
+
+
+def convert_str_to_date(date_string):
+    """
+    Convert a string to a date object. Accepts:
+    - YYYY-MM-DD
+    - Month Year
+    - Month Day, Year
+
+    :param date_string: The string to convert
+
+    :return: The date object
+    """
+    if date_string is None:
+        return None
+
+    try:
+        return datetime.strptime(date_string, "%Y-%m-%d").date()
+    except ValueError:
+        pass
+
+    try:
+        return datetime.strptime(date_string, "%B %Y").date()
+    except ValueError:
+        pass
+
+    try:
+        return datetime.strptime(date_string, "%B %d, %Y").date()
+    except ValueError:
+        logging.error(f"Invalid date format: {date_string}")
+        return None

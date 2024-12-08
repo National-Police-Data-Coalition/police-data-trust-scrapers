@@ -1,4 +1,3 @@
-import json
 import logging
 import random
 import re
@@ -14,7 +13,7 @@ from models.complaints import (
     Location,
 )
 from scrapers.fifty_a.fifty_a.items import SOURCE_REL, ComplaintItem
-from scrapers.fifty_a.fifty_a.utils import get_demographics
+from scrapers.fifty_a.fifty_a.utils import convert_str_to_date, get_demographics
 
 
 class ComplaintSpider(scrapy.Spider):
@@ -176,7 +175,6 @@ class ComplaintSpider(scrapy.Spider):
                 else:
                     # Skip other tags if necessary
                     continue
-        logging.debug(f"Attachments:\n{attachments}")
         return attachments
 
     @staticmethod
@@ -205,11 +203,11 @@ class ComplaintSpider(scrapy.Spider):
                 key = key.strip()
                 value = value.strip()
                 if key == "Incident":
-                    details["incident_date"] = value
+                    details["incident_date"] = convert_str_to_date(value)
                 elif key == "Received":
-                    details["received_date"] = value
+                    details["received_date"] = convert_str_to_date(value)
                 elif key == "Closed":
-                    details["closed_date"] = value
+                    details["closed_date"] = convert_str_to_date(value)
                 elif key == "Reason for contact":
                     details["reason_for_contact"] = value
                 elif key == "Outcome":
@@ -231,7 +229,6 @@ class ComplaintSpider(scrapy.Spider):
                     notes.append(line)
         if notes:
             details["notes"] = "; ".join(notes)
-        logging.debug(f"Details Data: {json.dumps(details)}")
 
         # Compose the location dictionary
         location_data = {
@@ -315,7 +312,6 @@ class ComplaintSpider(scrapy.Spider):
         p_data["penalty"] = div.css(
             "div.nypd_penalty span.nypd_penalty_details::text"
         ).get()
-        logging.debug(f"Penalty:\n{json.dumps(p_data)}")
         try:
             p = CreatePenalty(**p_data)
         except ValueError as e:
