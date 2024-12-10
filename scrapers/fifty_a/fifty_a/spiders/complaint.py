@@ -302,7 +302,7 @@ class ComplaintSpider(scrapy.Spider):
             if len(parts) > 1:
                 d_parts = parts[1].split(",")
                 if len(d_parts) > 1:
-                    p_data["date_assesed"] = d_parts[-1].strip()
+                    p_data["date_assesed"] = convert_str_to_date(d_parts[-1].strip())
                     p_data["crb_disposition"] = ",".join(d_parts[:-1]).strip()
                 else:
                     p_data["crb_disposition"] = parts[1]
