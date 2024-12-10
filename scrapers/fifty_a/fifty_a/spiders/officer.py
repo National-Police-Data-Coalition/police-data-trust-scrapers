@@ -139,7 +139,7 @@ class OfficerSpider(CrawlSpider):
         # Yield Litigation Items
         yield from self.parse_litigation(response)
 
-    def parse_litigation(self, response) -> List[CreateLitigation]:
+    def parse_litigation(self, response):
         container = response.css("div.lawsuits-details")
         if not container:
             return []
