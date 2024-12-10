@@ -28,6 +28,8 @@
 
 ## Run scrapers
 
+Note: You can add arguments to scrapers by adding `-a {argument_name}={argument_value}` to the end of the bash command.
+
 ### 50-a
 
 1. Go to the fifty_a folder

@@ -2,6 +2,7 @@ import pytest
 from scrapy.http import HtmlResponse
 
 from models.agencies import CreateUnit
+from scrapers.fifty_a.fifty_a.items import AGENCY_UID, SOURCE_UID
 from scrapers.fifty_a.fifty_a.spiders.command import CommandSpider
 from tests.fifty_a.fifty_a.spiders.command_page import command_1
 
@@ -18,7 +19,8 @@ class TestCommand:
         unit = results[0]
         assert unit.url == mock_response.url
         assert unit.model == "unit"
-        assert unit.source == "50-a.org"
+        assert unit.source_uid == SOURCE_UID
+        assert unit.agency == AGENCY_UID
 
         try:
             valid_data = CreateUnit(**unit.data)
