@@ -40,5 +40,6 @@ class CommandItem(FiftyAItem):
 
 @dataclass
 class OfficerItem(FiftyAItem):
+
     employment: List[dict] = None
     service_start: str = None

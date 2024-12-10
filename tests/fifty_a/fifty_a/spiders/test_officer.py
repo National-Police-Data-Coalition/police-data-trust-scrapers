@@ -46,7 +46,6 @@ class TestOfficer:
         for e in officer.employment:
             assert e["agency_uid"] == AGENCY_UID
             assert "/command/" in e["unit_uid"]
-
         try:
             valid_data = CreateOfficer(**officer.data)
         except ValueError as e:
