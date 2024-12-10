@@ -2,7 +2,7 @@ import logging
 import random
 import re
 from datetime import UTC, datetime
-from typing import Any, Dict, List, Optional
+from typing import List
 
 from scrapy import Request
 from scrapy.linkextractors import LinkExtractor
@@ -11,7 +11,6 @@ from scrapy.spiders import CrawlSpider, Rule
 from models.common import Article, Attachemnt
 from models.litigation import CreateLitigation
 from models.officers import CreateOfficer, StateId
-from scrapers.common.parse import parse_string_to_number
 from scrapers.fifty_a.fifty_a.items import AGENCY_UID, LitigationItem, OfficerItem
 from scrapers.fifty_a.fifty_a.utils import convert_str_to_date, get_demographics
 
@@ -425,23 +424,6 @@ class OfficerSpider(CrawlSpider):
         if len(parts) > 2:
             result["middle_name"] = " ".join(parts[1:-1])
         return result
-
-    @staticmethod
-    def parse_complaints(response) -> List[Optional[Dict[str, Any]]]:
-        complaints = []
-        for i in ["complaints", "allegations", "substantiated"]:
-            count = response.css(f".column .{i} .count::text").get()
-            count_parsed = parse_string_to_number(count)
-            if count_parsed is not None:
-                complaints.append({"name": i, "count": count_parsed})
-
-        for disp in response.css(".dispositions").css(".disposition"):
-            count = disp.css(".count::text").get()
-            count_parsed = parse_string_to_number(count)
-            if count_parsed is not None:
-                name = disp.css(".name::text").get()
-                complaints.append({"name": name, "count": count_parsed})
-        return complaints
 
     @staticmethod
     def estimate_dob(age):
