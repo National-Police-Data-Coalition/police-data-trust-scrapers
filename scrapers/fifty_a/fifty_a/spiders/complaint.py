@@ -4,6 +4,7 @@ import re
 from datetime import UTC, datetime
 
 import scrapy
+from scrapy import Request
 
 from models.complaints import (
     Civilian,
@@ -28,6 +29,14 @@ class ComplaintSpider(scrapy.Spider):
         super(ComplaintSpider, self).__init__(*args, **kwargs)
         self.test_mode = "test_mode" in kwargs
         self.max_units = int(kwargs.get("max_units", 10))
+        self.crawl_target = kwargs.get("crawl_target")
+
+    def start_requests(self):
+        if self.crawl_target:
+            yield Request(url=self.crawl_target, callback=self.parse_complaint)
+        else:
+            for url in self.start_urls:
+                yield Request(url, callback=self.parse_start_url)
 
     def parse(self, response):
         complaints = response.css('a[href^="/complaint/"]::attr(href)').getall()
@@ -52,6 +61,9 @@ class ComplaintSpider(scrapy.Spider):
         # Extract details from the 'div.details' section
         details_section = response.css("div.details")
         attachments = self.parse_attachments(details_section)
+        police_witnesses = response.css(
+            'div.details a[href*="/officer/"]::attr(href)'
+        ).getall()
         details_lines = details_section.xpath(".//text()").getall()
         details_lines = [line.strip() for line in details_lines if line.strip()]
         details_data = self.parse_details(details_lines)
@@ -82,11 +94,13 @@ class ComplaintSpider(scrapy.Spider):
                 "incident_date": details_data.get("incident_date", None),
                 "received_date": details_data.get("received_date", None),
                 "closed_date": details_data.get("closed_date", None),
+                "updated_date": details_data.get("updated_date", None),
                 "reason_for_contact": details_data.get("reason_for_contact", None),
                 "outcome_of_contact": details_data.get("outcome_of_contact", None),
                 "location": details_data.get("location", None),
                 "notes": details_data.get("notes", None),
                 "attachments": attachments,
+                "police_witnesses": police_witnesses,
                 "allegations": allegations,
                 "penalties": penalties,
             }.items()
@@ -208,6 +222,8 @@ class ComplaintSpider(scrapy.Spider):
                     details["received_date"] = convert_str_to_date(value)
                 elif key == "Closed":
                     details["closed_date"] = convert_str_to_date(value)
+                elif key == "Updated":
+                    details["updated_date"] = convert_str_to_date(value)
                 elif key == "Reason for contact":
                     details["reason_for_contact"] = value
                 elif key == "Outcome":

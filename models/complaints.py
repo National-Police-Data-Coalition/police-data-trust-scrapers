@@ -242,6 +242,9 @@ class CreateComplaint(BaseModel):
     closed_date: Optional[date] = Field(
         None, description="The date and time the complaint was closed."
     )
+    updated_date: Optional[date] = Field(
+        None, description="The date and time the complaint was last updated."
+    )
     location: Optional[Dict[str, Any]] = None
     reason_for_contact: Optional[str] = Field(
         None, description="The reason for the contact."

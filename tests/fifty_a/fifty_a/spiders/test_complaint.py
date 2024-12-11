@@ -31,9 +31,12 @@ class TestComplaint:
         assert valid_data.incident_date == date(2022, 2, 19)
         assert valid_data.received_date == date(2022, 3, 7)
         assert valid_data.closed_date == date(2023, 4, 12)
-        # assert valid_data.updated_date == date(2024, 12, 8)
+        assert valid_data.updated_date == date(2024, 12, 8)
         assert valid_data.reason_for_contact == "Report-domestic dispute"
         assert valid_data.outcome_of_contact == "Arrest - other violation/crime"
+
+        # Police Wittnesses
+        assert len(valid_data.police_witnesses) == 14
 
         # Source Details
         assert valid_data.source_details.record_type == SOURCE_REL["record_type"]
