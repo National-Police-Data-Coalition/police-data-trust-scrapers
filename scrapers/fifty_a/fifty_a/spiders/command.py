@@ -1,6 +1,7 @@
 import logging
 import random
 import re
+from datetime import UTC, datetime
 
 import scrapy
 
@@ -72,7 +73,12 @@ class CommandSpider(scrapy.Spider):
             logging.error(f"Validation error for unit {command_data['name']}: {e}")
             return None
 
-        yield CommandItem(url=response.url, model="unit", data=unit.model_dump())
+        yield CommandItem(
+            url=response.url,
+            model="unit",
+            data=unit.model_dump(),
+            scraped_at=datetime.now(UTC),
+        )
 
     def parse_address(self, address):
         """Parse the address into its components:
