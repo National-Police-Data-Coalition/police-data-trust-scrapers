@@ -36,7 +36,7 @@ class ComplaintSpider(scrapy.Spider):
             yield Request(url=self.crawl_target, callback=self.parse_complaint)
         else:
             for url in self.start_urls:
-                yield Request(url, callback=self.parse_start_url)
+                yield Request(url, callback=self.parse)
 
     def parse(self, response):
         complaints = response.css('a[href^="/complaint/"]::attr(href)').getall()
