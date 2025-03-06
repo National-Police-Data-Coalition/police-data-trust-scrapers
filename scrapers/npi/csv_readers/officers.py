@@ -252,7 +252,7 @@ def process_agencies(agency_list, unit_pattern, enrich_data=False):
 def process_csv(
     csv_filename, officer_output_file, agency_output_file=None, collect_agencies=False
 ):
-    officers = []
+    officers_dict = {}
     agencies = []
 
     unit_pattern = unit_regex()
@@ -261,6 +261,10 @@ def process_csv(
         csv_reader = csv.DictReader(csv_file)
         with open(officer_output_file, mode="w", encoding="utf-8") as jsonl_file:
             for row in csv_reader:
+                person_nbr = row.get("person_nbr")
+                if not person_nbr:
+                    continue
+
                 # Handle agency and unit data
                 agency_label = row.get("agency_name")
                 if agency_label:
@@ -273,50 +277,74 @@ def process_csv(
                     agency = None
                     unit = None
 
-                officer_data = {
-                    "url": "https://invisible.institute/national-police-index",
-                    "model": "officer",
-                    "data": {
-                        "first_name": row.get("first_name").title()
-                        if row.get("first_name")
-                        else None,
-                        "middle_name": row.get("middle_initial", "").strip() or None,
-                        "last_name": row.get("last_name").title()
-                        if row.get("last_name")
-                        else None,
-                        "suffix": row.get("suffix").upper()
-                        if row.get("suffix")
-                        else None,
-                        "ethnicity": None,
-                        "gender": None,  # Gender is not provided in CSV
-                        "date_of_birth": row.get("year_of_birth", None),
-                        "state_ids": [
+                if person_nbr not in officers_dict:
+                    officer_data = {
+                        "url": "https://invisible.institute/national-police-index",
+                        "model": "officer",
+                        "data": {
+                            "first_name": row.get("first_name").title()
+                            if row.get("first_name")
+                            else None,
+                            "middle_name": row.get("middle_initial", "").strip()
+                            or None,
+                            "last_name": row.get("last_name").title()
+                            if row.get("last_name")
+                            else None,
+                            "suffix": row.get("suffix").upper()
+                            if row.get("suffix")
+                            else None,
+                            "ethnicity": None,
+                            "gender": None,  # Gender is not provided in CSV
+                            "date_of_birth": row.get("year_of_birth", None),
+                            "state_ids": [
+                                {
+                                    "state": "CA",
+                                    "id_name": "NPI ID",
+                                    "value": row.get("person_nbr"),
+                                }
+                            ],
+                        },
+                        "scraped_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                        "source_uid": "",
+                        "employment": [
                             {
-                                "state": "CA",
-                                "id_name": "NPI ID",
-                                "value": row.get("person_nbr"),
+                                "earliest_date": row.get("start_date"),
+                                "latest_date": row.get("end_date"),
+                                "highest_rank": row.get("rank").title()
+                                if row.get("rank")
+                                else None,
+                                "unit_uid": unit.title() if unit else "Unknown",
+                                "agency_uid": agency.title() if agency else None,
                             }
                         ],
-                    },
-                    "scraped_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                    "source_uid": "",
-                    "employment": [
-                        {
-                            "earliest_date": row.get("start_date"),
-                            "latest_date": row.get("end_date"),
-                            "highest_rank": row.get("rank").title()
-                            if row.get("rank")
-                            else None,
-                            "unit_uid": unit.title() if unit else "Unknown",
-                            "agency_uid": agency.title() if agency else None,
-                        }
-                    ],
-                    "service_start": row.get("start_date"),
-                }
-                officers.append(officer_data)
+                        "service_start": row.get("start_date"),
+                    }
+                    officers_dict[person_nbr] = officer_data
+                else:
+                    # Handle multiple employment records
+                    employment = {
+                        "earliest_date": row.get("start_date"),
+                        "latest_date": row.get("end_date"),
+                        "highest_rank": row.get("rank").title()
+                        if row.get("rank")
+                        else None,
+                        "unit_uid": unit.title() if unit else "Unknown",
+                        "agency_uid": agency.title() if agency else None,
+                    }
+                    officers_dict[person_nbr]["employment"].append(employment)
+
+                    if row.get("start_date"):
+                        start_date = convert_str_to_date(row.get("start_date"))
+                        if start_date:
+                            if start_date < convert_str_to_date(
+                                officers_dict[person_nbr]["service_start"]
+                            ):
+                                officers_dict[person_nbr]["service_start"] = row.get(
+                                    "start_date"
+                                )
 
     with open(officer_output_file, mode="w", encoding="utf-8") as jsonl_file:
-        for officer in officers:
+        for officer in officers_dict.values():
             jsonl_file.write(json.dumps(officer) + "\n")
 
     if collect_agencies and agency_output_file:
@@ -328,6 +356,7 @@ def process_csv(
 
 if __name__ == "__main__":
     # Set up argument parser
+    # Usage: python officers.py path_to_input.csv path_to_output.jsonl
     parser = argparse.ArgumentParser(
         description="Process CSV files to JSONL for officers and agencies."
     )
