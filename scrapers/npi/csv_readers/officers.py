@@ -1,144 +1,30 @@
 import argparse
 import csv
 import json
-import re
 from datetime import datetime
+import logging
 
 import requests
 
-from models.enums import Ethnicity
+from models.officers import CreateOfficer, StateId, AddEmployment
+from models.agencies import CreateAgency, CreateUnit
 
-# from scrapers.npi.items import OfficerItem
+from scrapers.npi.items import OfficerItem, SOURCE_UID
+from scrapers.npi.mapping import SCHEMA_MAP
+from scrapers.npi.utils import convert_str_to_date, indentify_unit, unit_regex, map_ethnicity, map_gender, get_int
 
 # Google Places API key
 google_api_key = ""
 
+# Set up logging
+log_path = "_npi_officers.log"
+log_path = datetime.now().strftime("%Y-%m-%d:%H:%M:%S") + log_path
 
-def convert_str_to_date(date_string):
-    """
-    Convert a string to a date object. Accepts:
-    - YYYY-MM-DD
-    - Month Year
-    - Month Day, Year
-
-    :param date_string: The string to convert
-
-    :return: The date object
-    """
-    if date_string is None:
-        return None
-
-    try:
-        return datetime.strptime(date_string, "%Y-%m-%d").date()
-    except ValueError:
-        pass
-
-    try:
-        return datetime.strptime(date_string, "%B %Y").date()
-    except ValueError:
-        pass
-
-    try:
-        return datetime.strptime(date_string, "%m/%d/%Y").date()
-    except ValueError:
-        pass
-
-    try:
-        return datetime.strptime(date_string, "%B %d, %Y").date()
-    except ValueError:
-        return None
-
-
-def number_to_ordinal(number):
-    """Convert an integer to its ordinal representation (e.g., 1 to '1st', 2 to '2nd')."""
-    num = int(number)
-    if 10 <= num % 100 <= 20:
-        suffix = "th"
-    else:
-        suffix = {1: "st", 2: "nd", 3: "rd"}.get(num % 10, "th")
-    return f"{num}{suffix}"
-
-
-def fix_precinct_with_number(unit_label):
-    # Regex to capture a number (with optional leading zeros) followed by the word "precinct"
-    pattern = r"(\d+)\s*precinct"
-    match = re.search(pattern, unit_label, re.IGNORECASE)
-
-    if match:
-        # Extract remove leading zeros, add ordinals to number
-        number = match.group(1).lstrip("0") or "0"
-        ordinal_number = number_to_ordinal(number)
-        updated_unit_label = re.sub(
-            r"\b0*" + match.group(1) + r"\b\s*precinct",
-            ordinal_number + " precinct",
-            unit_label,
-            1,
-            flags=re.IGNORECASE,
-        )
-
-        return updated_unit_label
-
-    return unit_label  # Return the original string if no match is found
-
-
-def map_ethnicity(ethnicity):
-    if not ethnicity:
-        return None
-
-    ethnicity_mapping = {
-        "black": Ethnicity.BLACK_AFRICAN_AMERICAN.value,
-        "white": Ethnicity.WHITE.value,
-        "asian": Ethnicity.ASIAN.value,
-        "hispanic": Ethnicity.HISPANIC_LATINO.value,
-        "native american": Ethnicity.AMERICAN_INDIAN_ALASKA_NATIVE.value,
-        "native hawaiian": Ethnicity.NATIVE_HAWAIIAN_PACIFIC_ISLANDER.value,
-    }
-
-    for key, value in ethnicity_mapping.items():
-        if key in ethnicity.lower():
-            return value
-
-    return None
-
-
-def unit_regex(unit_signifiers=["Pct.", "No.", "Dist. No.", "District #", "Mud #"]):
-    """
-    Construct a regex pattern to match unit signifiers.
-    """
-    # Construct the regex pattern dynamically based on the provided unit signifiers
-    signifiers_pattern = "|".join(re.escape(signifier) for signifier in unit_signifiers)
-    unit_pattern = re.compile(
-        rf"(.*?)({signifiers_pattern})\s*(\d+|\w+)$", re.IGNORECASE
-    )
-    return unit_pattern
-
-
-def clean_agency_name(agency_name):
-    """
-    Remove duplicate occurrences of the word "Office" from the agency name.
-    Example: "tarrant co. sheriff's office office" -> "tarrant co. sheriff's office"
-    """
-    # Use regex to replace multiple occurrences of "office" (case-insensitive) with a single "office"
-    cleaned_name = re.sub(r"\boffice\b", "office", agency_name, flags=re.IGNORECASE)
-    cleaned_name = re.sub(
-        r"\boffice\s+office\b", "office", cleaned_name, flags=re.IGNORECASE
-    )
-    return cleaned_name.strip()
-
-
-def indentify_unit(agency_label, unit_pattern):
-    """
-    Identify the unit from the agency label.
-    """
-    agency_label = clean_agency_name(agency_label)
-    match = unit_pattern.match(agency_label)
-    if match:
-        parent_agency = match.group(1).strip()
-        unit_type = match.group(2).strip()
-        unit_name = match.group(3).strip()
-        full_unit_name = f"{unit_type} {unit_name}"
-        return parent_agency, full_unit_name
-    return agency_label, None
+logging.basicConfig(
+    level=logging.ERROR,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    filename=log_path
+)
 
 
 # Function to fetch address components from Google Places API
@@ -208,52 +94,101 @@ def process_agencies(agency_list, unit_pattern, enrich_data=False):
             elif "country" in component["types"]:
                 address_data["country"] = component["longText"]
 
+
+        agency_data = {
+            "name": agency_name.title(),
+            "hq_address": f"{address_data.get('street_number', '')} {address_data.get('route', '')}".strip(),
+            "hq_city": address_data.get("city", None),
+            "hq_state": address_data.get("state", None),
+            "hq_zip": address_data.get("postal_code", None),
+            "jurisdiction": None,
+            "phone": phone_number,
+            "email": None,
+            "website_url": website_uri
+        }
+
+        try:
+            agency = CreateAgency(**agency_data)
+        except ValueError as e:
+            logging.error(f"Validation error for agency {agency_name}: {e}")
+            continue
+
         agency_items.append(
             {
                 "url": "https://invisible.institute/national-police-index",
                 "model": "agency",
-                "data": {
-                    "name": agency_name.title(),
-                    "hq_state": address_data.get("state", None),
-                    "hq_city": address_data.get("city", None),
-                    "jurisdiction": None,
-                    "phone": phone_number,
-                    "email": None,
-                    "website_url": website_uri,
-                    "address": {
-                        "street": f"{address_data.get('street_number', '')} {address_data.get('route', '')}".strip(),
-                        "city": address_data.get("city", None),
-                        "state": address_data.get("state", None),
-                        "postal_code": address_data.get("postal_code", None),
-                        "country": address_data.get("country", None),
-                    },
-                },
+                "data": agency.model_dump(),
                 "scraped_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "source_uid": "NPI",
+                "source_uid": SOURCE_UID,
             }
         )
     for unit in units:
+        unit_data = {
+            "name": unit["unit"].title(),
+        }
+        try:
+            unit_item = CreateUnit(**unit_data)
+        except ValueError as e:
+            logging.error(f"Validation error for unit {unit}: {e}")
         agency_items.append(
             {
                 "url": "https://invisible.institute/national-police-index",
                 "model": "unit",
-                "data": {
-                    "name": unit["unit"].title(),
-                    "agency": unit["agency"].title(),
-                },
+                "data": unit_item.model_dump(),
                 "scraped_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "source_uid": "NPI",
+                "source_uid": SOURCE_UID,
+                "agency": unit["agency"].title(),
             }
         )
 
     return agency_items
 
+def get_field(row, schema, field_name, transform=lambda x: x):
+    """
+    Get a field from the row based on the schema.
+    If the field is not present, return None.
+    """
+    col = schema.get(field_name, field_name)
+    val = row.get(col)
+    return transform(val) if val else None
+
+def extract_employment(row, employ_schema, unit, agency):
+    """
+    Extract employment details from the row based on the employment schema.
+    Returns a dictionary with employment details.
+    """
+    data = {
+        "earliest_employment": get_field(
+            row, employ_schema, "earliest_employment"),
+        "latest_employment": get_field(
+            row, employ_schema, "latest_employment"),
+        "highest_rank": get_field(
+            row, employ_schema, "highest_rank", str.title),
+        "badge_number": get_field(
+            row, employ_schema, "badge_number", str.upper),
+        "type": get_field(
+            row, employ_schema, "type", str.title),
+        "employment_change": get_field(
+            row, employ_schema, "employment_change", str.title),
+        "status": get_field(
+            row, employ_schema, "status", str.title),
+        "unit_uid": unit.title() if unit else "Unknown",
+        "agency_uid": agency.title() if agency else None,
+    }
+    try:
+        employment = AddEmployment(**data)
+    except ValueError as e:
+        logging.error(f"Validation error for employment data: {e}")
+        return None
+    return employment.model_dump()
 
 def process_csv(
-    csv_filename, officer_output_file, agency_output_file=None, collect_agencies=False
+    csv_filename, officer_output_file, state, agency_output_file=None, collect_agencies=False
 ):
     officers_dict = {}
     agencies = []
+    schema = SCHEMA_MAP.get(state, SCHEMA_MAP["default"])
+    employ_schema = schema.get("employment", {})
 
     unit_pattern = unit_regex()
 
@@ -261,12 +196,15 @@ def process_csv(
         csv_reader = csv.DictReader(csv_file)
         with open(officer_output_file, mode="w", encoding="utf-8") as jsonl_file:
             for row in csv_reader:
-                person_nbr = row.get("person_nbr")
-                if not person_nbr:
+                person_nbr = row.get(schema['state_id']['value'], None)
+                if person_nbr is None:
+                    logging.error("Missing person number in row, skipping.")
                     continue
 
                 # Handle agency and unit data
-                agency_label = row.get("agency_name")
+                agency_label = get_field(
+                    row, employ_schema, "agency_uid", str.lower
+                )
                 if agency_label:
                     agency_label = agency_label.lower().strip()
                     agency, unit = indentify_unit(agency_label, unit_pattern)
@@ -278,70 +216,63 @@ def process_csv(
                     unit = None
 
                 if person_nbr not in officers_dict:
+                    state_id = StateId(
+                        state=state, id_name="NPI ID", value=person_nbr
+                    )
                     officer_data = {
+                        "first_name": get_field(row, schema, "first_name", str.title),
+                        "middle_name": get_field(row, schema, "middle_name", str.title),
+                        "last_name": get_field(row, schema, "last_name", str.title),
+                        "suffix": get_field(row, schema, "suffix", str.upper),
+                        "ethnicity": get_field(row, schema, "ethnicity", map_ethnicity),
+                        "gender": get_field(row, schema, "gender", map_gender),
+                        "year_of_birth": get_field(row, schema, "year_of_birth", get_int),
+                        "state_ids": [state_id],
+                    }
+                    employment = extract_employment(
+                        row, employ_schema, unit, agency
+                    )
+                    if employment:
+                        employment_history = [
+                            employment
+                        ]
+
+                    try:
+                        officer = CreateOfficer(**officer_data)
+                    except ValueError as e:
+                        logging.error(f"Validation error for officer {person_nbr}: {e}")
+                        return None
+
+                    officer_item = {
                         "url": "https://invisible.institute/national-police-index",
                         "model": "officer",
-                        "data": {
-                            "first_name": row.get("first_name").title()
-                            if row.get("first_name")
-                            else None,
-                            "middle_name": row.get("middle_initial", "").strip()
-                            or None,
-                            "last_name": row.get("last_name").title()
-                            if row.get("last_name")
-                            else None,
-                            "suffix": row.get("suffix").upper()
-                            if row.get("suffix")
-                            else None,
-                            "ethnicity": None,
-                            "gender": None,  # Gender is not provided in CSV
-                            "date_of_birth": row.get("year_of_birth", None),
-                            "state_ids": [
-                                {
-                                    "state": "CA",
-                                    "id_name": "NPI ID",
-                                    "value": row.get("person_nbr"),
-                                }
-                            ],
-                        },
+                        "data": officer.model_dump(),
                         "scraped_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                        "source_uid": "",
-                        "employment": [
-                            {
-                                "earliest_date": row.get("start_date"),
-                                "latest_date": row.get("end_date"),
-                                "highest_rank": row.get("rank").title()
-                                if row.get("rank")
-                                else None,
-                                "unit_uid": unit.title() if unit else "Unknown",
-                                "agency_uid": agency.title() if agency else None,
-                            }
-                        ],
+                        "source_uid": SOURCE_UID,
+                        "employment": employment_history,
                         "service_start": row.get("start_date"),
                     }
-                    officers_dict[person_nbr] = officer_data
+                    officers_dict[person_nbr] = officer_item
                 else:
                     # Handle multiple employment records
-                    employment = {
-                        "earliest_date": row.get("start_date"),
-                        "latest_date": row.get("end_date"),
-                        "highest_rank": row.get("rank").title()
-                        if row.get("rank")
-                        else None,
-                        "unit_uid": unit.title() if unit else "Unknown",
-                        "agency_uid": agency.title() if agency else None,
-                    }
-                    officers_dict[person_nbr]["employment"].append(employment)
+                    employment = extract_employment(
+                        row, employ_schema, unit, agency
+                    )
+                    if employment:
+                        officers_dict[person_nbr]["employment"].append(employment)
 
-                    if row.get("start_date"):
-                        start_date = convert_str_to_date(row.get("start_date"))
-                        if start_date:
-                            if start_date < convert_str_to_date(
-                                officers_dict[person_nbr]["service_start"]
-                            ):
-                                officers_dict[person_nbr]["service_start"] = row.get(
-                                    "start_date"
-                                )
+                    try:
+                        if row.get("start_date") and officers_dict[person_nbr].get("service_start"):
+                            start_date = convert_str_to_date(row.get("start_date"))
+                            if start_date and officers_dict[person_nbr].get("service_start"):
+                                if start_date < convert_str_to_date(
+                                    officers_dict[person_nbr]["service_start"]
+                                ):
+                                    officers_dict[person_nbr]["service_start"] = row.get(
+                                        "start_date"
+                                    )
+                    except TypeError as e:
+                        logging.error(f"Type error for officer {person_nbr}: {e}")
 
     with open(officer_output_file, mode="w", encoding="utf-8") as jsonl_file:
         for officer in officers_dict.values():
@@ -365,6 +296,11 @@ if __name__ == "__main__":
         "officer_jsonl", help="Path to the output JSONL file for officers"
     )
     parser.add_argument(
+        "--state",
+        default="TX",
+        help="State code for the officers (default: TX)",
+    )
+    parser.add_argument(
         "--agency-jsonl",
         help="Path to the output JSONL file for agencies",
         default=None,
@@ -380,6 +316,7 @@ if __name__ == "__main__":
     process_csv(
         csv_filename=args.csv_file,
         officer_output_file=args.officer_jsonl,
+        state=args.state,
         agency_output_file=args.agency_jsonl,
         collect_agencies=args.collect_agencies,
     )

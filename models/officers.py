@@ -43,6 +43,20 @@ class BaseEmployment(BaseModel):
         None,
         description="Indicates that the officer commanded the unit during this employment.",
     )
+    type: Optional[str] = Field(
+        None,
+        description="The type of employment. For example, 'Law Enforcement', 'Corrections', etc.",
+    )
+    employment_change: Optional[bool] = Field(
+        None,
+        description="Indicates the most recent change in employment status."
+        "For example, hired, retired, certified, demoted, promoted.",
+    )
+    status: Optional[str] = Field(
+        None,
+        description="The current status of the officer's certification. "
+        "For example, 'Active', 'Separated', 'Retired', etc.",
+    )
 
 
 class AddEmployment(BaseEmployment, BaseModel):
@@ -69,6 +83,20 @@ class AddEmployment(BaseEmployment, BaseModel):
     commander: Optional[bool] = Field(
         None,
         description="Indicates that the officer commanded the unit during this employment.",
+    )
+    type: Optional[str] = Field(
+        None,
+        description="The type of employment. For example, 'Law Enforcement', 'Corrections', etc.",
+    )
+    employment_change: Optional[str] = Field(
+        None,
+        description="Indicates the most recent change in employment status."
+        "For example, hired, retired, certified, demoted, promoted.",
+    )
+    status: Optional[str] = Field(
+        None,
+        description="The current status of the officer's certification. "
+        "For example, 'Active', 'Separated', 'Retired', etc.",
     )
 
 
@@ -112,6 +140,20 @@ class Employment(BaseEmployment, BaseModel):
         None,
         description="Indicates that the officer commanded the unit during this employment.",
     )
+    type: Optional[str] = Field(
+        None,
+        description="The type of employment. For example, 'Law Enforcement', 'Corrections', etc.",
+    )
+    employment_change: Optional[bool] = Field(
+        None,
+        description="Indicates the most recent change in employment status."
+        "For example, hired, retired, certified, demoted, promoted.",
+    )
+    status: Optional[str] = Field(
+        None,
+        description="The current status of the officer's certification. "
+        "For example, 'Active', 'Separated', 'Retired', etc.",
+    )
 
 
 class AddEmploymentResponse(BaseModel):
@@ -151,8 +193,8 @@ class CreateOfficer(BaseOfficer, BaseModel):
         None, description="The ethnicity of the officer"
     )
     gender: Optional[Gender] = Field(None, description="The gender of the officer")
-    date_of_birth: Optional[date] = Field(
-        None, description="The date of birth of the officer"
+    year_of_birth: Optional[int] = Field(
+        None, description="The year of birth of the officer"
     )
     state_ids: Optional[List[StateId]] = Field(
         None, description="The state ids of the officer"
