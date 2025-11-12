@@ -8,8 +8,8 @@ texas = {
         "value": "person_nbr"
     },
     "employment":{
-        "earliest_employment": "start_date",
-        "latest_employment": "end_date",
+        "earliest_date": "start_date",
+        "latest_date": "end_date",
         "highest_rank": "rank",
         "agency_uid": "agency_name",
         "type": "type", # Options: Peace Officer, Reserve Officer, Jailer,
@@ -33,8 +33,8 @@ california = {
         "value": "person_nbr"
     },
     "employment":{
-        "earliest_employment": "start_date",
-        "latest_employment": "end_date",
+        "earliest_date": "start_date",
+        "latest_date": "end_date",
         "highest_rank": "rank",
         "agency_uid": "agency_name",
         "type": "type" # Options: CORRECTIONS, POLICE
@@ -53,8 +53,8 @@ illinois = {
         "value": "person_nbr"
     },
     "employment":{
-        "earliest_employment": "start_date",
-        "latest_employment": "end_date",
+        "earliest_date": "start_date",
+        "latest_date": "end_date",
         "highest_rank": "rank",
         "agency_uid": "agency_name",
         "rank": "rank",  
@@ -75,8 +75,8 @@ washington = {
         "value": "person_nbr"
     },
     "employment":{
-        "earliest_employment": "start_date",
-        "latest_employment": "end_date",
+        "earliest_date": "start_date",
+        "latest_date": "end_date",
         "highest_rank": "rank",
         "agency_uid": "agency_name",
         "type": "type", 
@@ -100,8 +100,8 @@ arizona = {
         "value": "person_nbr"
     },
     "employment":{
-        "earliest_employment": "start_date",
-        "latest_employment": "end_date",
+        "earliest_date": "start_date",
+        "latest_date": "end_date",
         "highest_rank": "rank",
         "agency_uid": "agency_name",
         "status": "current_certificate_status",  # Options: Active, Inactive, Lapsed, Revoked, Relinquished
@@ -117,8 +117,8 @@ tennessee = {
         "value": "person_nbr"
     },
     "employment":{
-        "earliest_employment": "start_date",
-        "latest_employment": "end_date",
+        "earliest_date": "start_date",
+        "latest_date": "end_date",
         "highest_rank": "rank",
         "agency_uid": "agency_name",
         "type": "type",  # Examples: Law Enforcement, Corrections, Auxiliary
@@ -144,8 +144,8 @@ SCHEMA_MAP['default'] = {
     "employment":{
         "agency_uid": "agency_uid",
         "unit_uid": "unit_uid",
-        "earliest_employment": "start_date",
-        "latest_employment": "end_date",
+        "earliest_date": "start_date",
+        "latest_date": "end_date",
         "badge_number": "badge_number",
         "highest_rank": "rank",
         "commander": "commander",

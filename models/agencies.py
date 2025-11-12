@@ -147,10 +147,10 @@ class UnitList(PaginatedResponse, BaseModel):
 
 class AddOfficer(BaseModel):
     officer_uid: str = Field(..., description="The uid of the officer")
-    earliest_employment: Optional[str] = Field(
+    earliest_date: Optional[str] = Field(
         None, description="The earliest date of employment"
     )
-    latest_employment: Optional[str] = Field(
+    latest_date: Optional[str] = Field(
         None, description="The latest date of employment"
     )
     badge_number: str = Field(..., description="The badge number of the officer")

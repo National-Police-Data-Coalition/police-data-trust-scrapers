@@ -19,6 +19,15 @@ class Ethnicity(str, Enum):
     HISPANIC_LATINO = "Hispanic/Latino"
 
 
+class Jurisdiction(str, Enum):
+    FEDERAL = "FEDERAL"
+    STATE = "STATE"
+    COUNTY = "COUNTY"
+    MUNICIPAL = "MUNICIPAL"
+    PRIVATE = "PRIVATE"
+    OTHER = "OTHER"
+
+
 class State(str, Enum):
     AL = "AL"
     AK = "AK"

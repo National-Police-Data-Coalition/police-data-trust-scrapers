@@ -26,9 +26,32 @@ logging.basicConfig(
     filename=log_path
 )
 
+# Select the proper place based on the sate and county
+def select_place(places, *, state, county):
+    for place in places:
+        if "addressComponents" in place:
+            address_components = place["addressComponents"]
+            for component in address_components:
+                if "administrative_area_level_1" in component["types"]:
+                    if component["shortText"].lower() == state.lower():
+                        if county:
+                            for comp in address_components:
+                                if "administrative_area_level_2" in comp["types"]:
+                                    if comp["shortText"].lower() == county.lower():
+                                        return place
+                        else:
+                            return place
 
 # Function to fetch address components from Google Places API
-def get_google_places_data(agency_name):
+def get_google_places_data(agency_name, *, google_state=None, google_county=None):
+    logging.debug(f"Get_places called with state={google_state!r}, county={google_county!r}")
+    query = agency_name
+    if google_state or google_county:
+        query += " in "
+    if google_county: 
+        query += f"{google_county} county, "
+    if google_state:
+        query += f"{google_state}"
     url = "https://places.googleapis.com/v1/places:searchText"
     headers = {
         "X-Goog-FieldMask": "places.displayName,places.addressComponents,places.websiteUri,places.types",
@@ -36,7 +59,7 @@ def get_google_places_data(agency_name):
         "X-Goog-Api-Key": google_api_key,
     }
     payload = {
-        "textQuery": agency_name,
+        "textQuery": query,
         "includedType": "government_office",
         "strictTypeFiltering": True,
     }
@@ -44,11 +67,13 @@ def get_google_places_data(agency_name):
     if response.status_code == 200:
         data = response.json()
         if "places" in data and len(data["places"]) > 0:
+            # Log the full set of results for debugging
+            logging.debug(f"Google Places API results for '{query}':\n{json.dumps(data['places'])}")
             return data["places"][0]  # Return the first result
     return None
 
 
-def process_agencies(agency_list, unit_pattern, enrich_data=False):
+def process_agencies(agency_set, state, enrich_data=True):
     """
     Identify seperate units within the agency list.
     Return a list of agency and unit items.
@@ -57,17 +82,32 @@ def process_agencies(agency_list, unit_pattern, enrich_data=False):
     updated_agencies = []
     agency_items = []
 
-    for agency in agency_list:
-        parent_agency, unit = indentify_unit(agency, unit_pattern)
+    for agency in agency_set.values():
+        parent_agency = agency.get("agency", None)
+        unit = agency.get("unit", None)
+        county = agency.get("county", None)
         if unit:
             units.append({"agency": parent_agency, "unit": unit})
         # Add the parent agency to the updated agency list if not already present
         if parent_agency not in updated_agencies:
-            updated_agencies.append(parent_agency)
+            updated_agencies.append({
+                "agency": parent_agency,
+                "county": county
+            })
 
-    for agency_name in updated_agencies:
+    for distict_agency in updated_agencies:
+        name = distict_agency.get("agency", None)
+        county = distict_agency.get("county", None)
         if enrich_data:
-            google_data = get_google_places_data(agency_name)
+            if name.lower() != "Other-Out-Of-State".lower():
+                logging.debug(f"Enriching data. County: {county}, State: {state}")
+                if county == "Other State Than Texas":
+                    google_data = get_google_places_data(name, google_state=None, google_county=None)
+                else:
+                    google_data = get_google_places_data(name, google_state=state, google_county=county)
+            else:
+                logging.debug(f"Skipping enrichment for agency: {name}")
+                google_data = None
         else:
             google_data = None
         address_components = (
@@ -96,7 +136,7 @@ def process_agencies(agency_list, unit_pattern, enrich_data=False):
 
 
         agency_data = {
-            "name": agency_name.title(),
+            "name": name.title(),
             "hq_address": f"{address_data.get('street_number', '')} {address_data.get('route', '')}".strip(),
             "hq_city": address_data.get("city", None),
             "hq_state": address_data.get("state", None),
@@ -110,7 +150,7 @@ def process_agencies(agency_list, unit_pattern, enrich_data=False):
         try:
             agency = CreateAgency(**agency_data)
         except ValueError as e:
-            logging.error(f"Validation error for agency {agency_name}: {e}")
+            logging.error(f"Validation error for agency {name}: {e}")
             continue
 
         agency_items.append(
@@ -158,10 +198,10 @@ def extract_employment(row, employ_schema, unit, agency):
     Returns a dictionary with employment details.
     """
     data = {
-        "earliest_employment": get_field(
-            row, employ_schema, "earliest_employment"),
-        "latest_employment": get_field(
-            row, employ_schema, "latest_employment"),
+        "earliest_date": get_field(
+            row, employ_schema, "earliest_date"),
+        "latest_date": get_field(
+            row, employ_schema, "latest_date"),
         "highest_rank": get_field(
             row, employ_schema, "highest_rank", str.title),
         "badge_number": get_field(
@@ -186,7 +226,7 @@ def process_csv(
     csv_filename, officer_output_file, state, agency_output_file=None, collect_agencies=False
 ):
     officers_dict = {}
-    agencies = []
+    agencies_dict = {}
     schema = SCHEMA_MAP.get(state, SCHEMA_MAP["default"])
     employ_schema = schema.get("employment", {})
 
@@ -206,11 +246,17 @@ def process_csv(
                     row, employ_schema, "agency_uid", str.lower
                 )
                 if agency_label:
-                    agency_label = agency_label.lower().strip()
+                    agency_label = agency_label.strip()
                     agency, unit = indentify_unit(agency_label, unit_pattern)
                     if collect_agencies:
-                        if agency_label not in agencies:
-                            agencies.append(agency_label)
+                        if agency_label not in agencies_dict:
+                            # Get the county if it is given
+                            county = row.get('county', None)
+                            agencies_dict[agency_label] = {
+                                "agency": agency,
+                                "unit": unit,
+                                "county": county
+                            }
                 else:
                     agency = None
                     unit = None
@@ -279,7 +325,7 @@ def process_csv(
             jsonl_file.write(json.dumps(officer) + "\n")
 
     if collect_agencies and agency_output_file:
-        agency_items = process_agencies(agencies, unit_pattern)
+        agency_items = process_agencies(agencies_dict, state)
         with open(agency_output_file, mode="w", encoding="utf-8") as jsonl_file:
             for item in agency_items:
                 jsonl_file.write(json.dumps(item) + "\n")

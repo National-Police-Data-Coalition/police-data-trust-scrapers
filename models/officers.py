@@ -26,10 +26,10 @@ class BaseEmployment(BaseModel):
     unit_uid: Optional[str] = Field(
         None, description="The UID of the unit the officer is assigned to."
     )
-    earliest_employment: Optional[str] = Field(
+    earliest_date: Optional[str] = Field(
         None, description="The earliest known date of employment"
     )
-    latest_employment: Optional[str] = Field(
+    latest_date: Optional[str] = Field(
         None, description="The latest known date of employment"
     )
     badge_number: Optional[str] = Field(
@@ -67,10 +67,10 @@ class AddEmployment(BaseEmployment, BaseModel):
     unit_uid: Optional[str] = Field(
         None, description="The UID of the unit the officer is assigned to."
     )
-    earliest_employment: Optional[str] = Field(
+    earliest_date: Optional[str] = Field(
         None, description="The earliest known date of employment"
     )
-    latest_employment: Optional[str] = Field(
+    latest_date: Optional[str] = Field(
         None, description="The latest known date of employment"
     )
     badge_number: Optional[str] = Field(
@@ -123,10 +123,10 @@ class Employment(BaseEmployment, BaseModel):
     unit_uid: Optional[str] = Field(
         None, description="The UID of the unit the officer is assigned to."
     )
-    earliest_employment: Optional[str] = Field(
+    earliest_date: Optional[str] = Field(
         None, description="The earliest known date of employment"
     )
-    latest_employment: Optional[str] = Field(
+    latest_date: Optional[str] = Field(
         None, description="The latest known date of employment"
     )
     badge_number: Optional[str] = Field(

@@ -179,3 +179,26 @@ def indentify_unit(agency_label, unit_pattern):
         return parent_agency, full_unit_name
     return agency_label, None
 
+
+def classify_jurisdiction(name: str) -> str:
+    """Classify agency jurisdiction based on its name."""
+    name_lower = name.lower()
+    if any(keyword in name_lower for keyword in ['federal', 'national', 'homeland', 'u.s. marshals']):
+        return 'FEDERAL'
+    if name_lower.startswith('illinois department of'):
+        return 'STATE'
+    if 'department of corrections' in name_lower:
+        if 'county' in name_lower:
+            return 'COUNTY'
+        return 'STATE'
+    if any(keyword in name_lower for keyword in ['state police', "state's"]):
+        return 'STATE'
+    if  any(keyword in name_lower for keyword in ['railroad police']):
+        return 'PRIVATE'
+    if any(keyword in name_lower for keyword in ['sheriff', 'county', 'county sheriff', 'county department', 'co. sheriff', 'co. const.', 'co. correctional']):
+        return 'COUNTY'
+    if any(keyword in name_lower for keyword in ['isd', 'independent school district', 'school district', 'university', 'campus police']):
+        return 'OTHER'
+    if any(keyword in name_lower for keyword in ['police department', 'police dept']):
+        return 'MUNICIPAL'
+    return 'OTHER'
