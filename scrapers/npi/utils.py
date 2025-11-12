@@ -43,18 +43,18 @@ def convert_str_to_date(date_string):
 def get_int(value):
     """
     Convert a value to an integer, returning None if conversion fails.
-    
+
     :param value: The value to convert
     :return: The integer value or None if conversion fails
     """
     if value is None:
         return None
-    
+
     if isinstance(value, int):
         return value
     if isinstance(value, str) and value.isdigit():
         return int(value)
-    if isinstance(value, str) and value.replace('.', '', 1).isdigit():
+    if isinstance(value, str) and value.replace(".", "", 1).isdigit():
         # Handle float strings by converting to int
         try:
             return int(float(value))
@@ -64,7 +64,6 @@ def get_int(value):
     if isinstance(value, float):
         return int(value)
     logging.warning(f"Failed to convert {value} to int")
-    
 
 
 def number_to_ordinal(number):
@@ -122,10 +121,11 @@ def map_ethnicity(ethnicity):
 
     return None
 
+
 def map_gender(gender):
     if not gender:
         return None
-    
+
     gender_mapping = {
         "male": Gender.MALE.value,
         "female": Gender.FEMALE.value,
@@ -134,10 +134,8 @@ def map_gender(gender):
     for key, value in gender_mapping.items():
         if key in gender.lower():
             return value
-        
+
     return None
-
-
 
 
 def unit_regex(unit_signifiers=["Pct.", "No.", "Dist. No.", "District #", "Mud #"]):
@@ -183,22 +181,45 @@ def indentify_unit(agency_label, unit_pattern):
 def classify_jurisdiction(name: str) -> str:
     """Classify agency jurisdiction based on its name."""
     name_lower = name.lower()
-    if any(keyword in name_lower for keyword in ['federal', 'national', 'homeland', 'u.s. marshals']):
-        return 'FEDERAL'
-    if name_lower.startswith('illinois department of'):
-        return 'STATE'
-    if 'department of corrections' in name_lower:
-        if 'county' in name_lower:
-            return 'COUNTY'
-        return 'STATE'
-    if any(keyword in name_lower for keyword in ['state police', "state's"]):
-        return 'STATE'
-    if  any(keyword in name_lower for keyword in ['railroad police']):
-        return 'PRIVATE'
-    if any(keyword in name_lower for keyword in ['sheriff', 'county', 'county sheriff', 'county department', 'co. sheriff', 'co. const.', 'co. correctional']):
-        return 'COUNTY'
-    if any(keyword in name_lower for keyword in ['isd', 'independent school district', 'school district', 'university', 'campus police']):
-        return 'OTHER'
-    if any(keyword in name_lower for keyword in ['police department', 'police dept']):
-        return 'MUNICIPAL'
-    return 'OTHER'
+    if any(
+        keyword in name_lower
+        for keyword in ["federal", "national", "homeland", "u.s. marshals"]
+    ):
+        return "FEDERAL"
+    if name_lower.startswith("illinois department of"):
+        return "STATE"
+    if "department of corrections" in name_lower:
+        if "county" in name_lower:
+            return "COUNTY"
+        return "STATE"
+    if any(keyword in name_lower for keyword in ["state police", "state's"]):
+        return "STATE"
+    if any(keyword in name_lower for keyword in ["railroad police"]):
+        return "PRIVATE"
+    if any(
+        keyword in name_lower
+        for keyword in [
+            "sheriff",
+            "county",
+            "county sheriff",
+            "county department",
+            "co. sheriff",
+            "co. const.",
+            "co. correctional",
+        ]
+    ):
+        return "COUNTY"
+    if any(
+        keyword in name_lower
+        for keyword in [
+            "isd",
+            "independent school district",
+            "school district",
+            "university",
+            "campus police",
+        ]
+    ):
+        return "OTHER"
+    if any(keyword in name_lower for keyword in ["police department", "police dept"]):
+        return "MUNICIPAL"
+    return "OTHER"

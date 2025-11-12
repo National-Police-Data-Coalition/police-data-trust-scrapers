@@ -1,17 +1,23 @@
 import argparse
 import csv
 import json
-from datetime import datetime
 import logging
+from datetime import datetime
 
 import requests
 
-from models.officers import CreateOfficer, StateId, AddEmployment
 from models.agencies import CreateAgency, CreateUnit
-
-from scrapers.npi.items import OfficerItem, SOURCE_UID
+from models.officers import AddEmployment, CreateOfficer, StateId
+from scrapers.npi.items import SOURCE_UID
 from scrapers.npi.mapping import SCHEMA_MAP
-from scrapers.npi.utils import convert_str_to_date, indentify_unit, unit_regex, map_ethnicity, map_gender, get_int
+from scrapers.npi.utils import (
+    convert_str_to_date,
+    get_int,
+    indentify_unit,
+    map_ethnicity,
+    map_gender,
+    unit_regex,
+)
 
 # Google Places API key
 google_api_key = ""
@@ -23,8 +29,9 @@ log_path = datetime.now().strftime("%Y-%m-%d:%H:%M:%S") + log_path
 logging.basicConfig(
     level=logging.ERROR,
     format="%(asctime)s - %(levelname)s - %(message)s",
-    filename=log_path
+    filename=log_path,
 )
+
 
 # Select the proper place based on the sate and county
 def select_place(places, *, state, county):
@@ -42,13 +49,16 @@ def select_place(places, *, state, county):
                         else:
                             return place
 
+
 # Function to fetch address components from Google Places API
 def get_google_places_data(agency_name, *, google_state=None, google_county=None):
-    logging.debug(f"Get_places called with state={google_state!r}, county={google_county!r}")
+    logging.debug(
+        f"Get_places called with state={google_state!r}, county={google_county!r}"
+    )
     query = agency_name
     if google_state or google_county:
         query += " in "
-    if google_county: 
+    if google_county:
         query += f"{google_county} county, "
     if google_state:
         query += f"{google_state}"
@@ -68,7 +78,9 @@ def get_google_places_data(agency_name, *, google_state=None, google_county=None
         data = response.json()
         if "places" in data and len(data["places"]) > 0:
             # Log the full set of results for debugging
-            logging.debug(f"Google Places API results for '{query}':\n{json.dumps(data['places'])}")
+            logging.debug(
+                f"Google Places API results for '{query}':\n{json.dumps(data['places'])}"
+            )
             return data["places"][0]  # Return the first result
     return None
 
@@ -90,10 +102,7 @@ def process_agencies(agency_set, state, enrich_data=True):
             units.append({"agency": parent_agency, "unit": unit})
         # Add the parent agency to the updated agency list if not already present
         if parent_agency not in updated_agencies:
-            updated_agencies.append({
-                "agency": parent_agency,
-                "county": county
-            })
+            updated_agencies.append({"agency": parent_agency, "county": county})
 
     for distict_agency in updated_agencies:
         name = distict_agency.get("agency", None)
@@ -102,9 +111,13 @@ def process_agencies(agency_set, state, enrich_data=True):
             if name.lower() != "Other-Out-Of-State".lower():
                 logging.debug(f"Enriching data. County: {county}, State: {state}")
                 if county == "Other State Than Texas":
-                    google_data = get_google_places_data(name, google_state=None, google_county=None)
+                    google_data = get_google_places_data(
+                        name, google_state=None, google_county=None
+                    )
                 else:
-                    google_data = get_google_places_data(name, google_state=state, google_county=county)
+                    google_data = get_google_places_data(
+                        name, google_state=state, google_county=county
+                    )
             else:
                 logging.debug(f"Skipping enrichment for agency: {name}")
                 google_data = None
@@ -134,7 +147,6 @@ def process_agencies(agency_set, state, enrich_data=True):
             elif "country" in component["types"]:
                 address_data["country"] = component["longText"]
 
-
         agency_data = {
             "name": name.title(),
             "hq_address": f"{address_data.get('street_number', '')} {address_data.get('route', '')}".strip(),
@@ -144,7 +156,7 @@ def process_agencies(agency_set, state, enrich_data=True):
             "jurisdiction": None,
             "phone": phone_number,
             "email": None,
-            "website_url": website_uri
+            "website_url": website_uri,
         }
 
         try:
@@ -183,6 +195,7 @@ def process_agencies(agency_set, state, enrich_data=True):
 
     return agency_items
 
+
 def get_field(row, schema, field_name, transform=lambda x: x):
     """
     Get a field from the row based on the schema.
@@ -192,26 +205,22 @@ def get_field(row, schema, field_name, transform=lambda x: x):
     val = row.get(col)
     return transform(val) if val else None
 
+
 def extract_employment(row, employ_schema, unit, agency):
     """
     Extract employment details from the row based on the employment schema.
     Returns a dictionary with employment details.
     """
     data = {
-        "earliest_date": get_field(
-            row, employ_schema, "earliest_date"),
-        "latest_date": get_field(
-            row, employ_schema, "latest_date"),
-        "highest_rank": get_field(
-            row, employ_schema, "highest_rank", str.title),
-        "badge_number": get_field(
-            row, employ_schema, "badge_number", str.upper),
-        "type": get_field(
-            row, employ_schema, "type", str.title),
+        "earliest_date": get_field(row, employ_schema, "earliest_date"),
+        "latest_date": get_field(row, employ_schema, "latest_date"),
+        "highest_rank": get_field(row, employ_schema, "highest_rank", str.title),
+        "badge_number": get_field(row, employ_schema, "badge_number", str.upper),
+        "type": get_field(row, employ_schema, "type", str.title),
         "employment_change": get_field(
-            row, employ_schema, "employment_change", str.title),
-        "status": get_field(
-            row, employ_schema, "status", str.title),
+            row, employ_schema, "employment_change", str.title
+        ),
+        "status": get_field(row, employ_schema, "status", str.title),
         "unit_uid": unit.title() if unit else "Unknown",
         "agency_uid": agency.title() if agency else None,
     }
@@ -222,8 +231,13 @@ def extract_employment(row, employ_schema, unit, agency):
         return None
     return employment.model_dump()
 
+
 def process_csv(
-    csv_filename, officer_output_file, state, agency_output_file=None, collect_agencies=False
+    csv_filename,
+    officer_output_file,
+    state,
+    agency_output_file=None,
+    collect_agencies=False,
 ):
     officers_dict = {}
     agencies_dict = {}
@@ -236,35 +250,31 @@ def process_csv(
         csv_reader = csv.DictReader(csv_file)
         with open(officer_output_file, mode="w", encoding="utf-8") as jsonl_file:
             for row in csv_reader:
-                person_nbr = row.get(schema['state_id']['value'], None)
+                person_nbr = row.get(schema["state_id"]["value"], None)
                 if person_nbr is None:
                     logging.error("Missing person number in row, skipping.")
                     continue
 
                 # Handle agency and unit data
-                agency_label = get_field(
-                    row, employ_schema, "agency_uid", str.lower
-                )
+                agency_label = get_field(row, employ_schema, "agency_uid", str.lower)
                 if agency_label:
                     agency_label = agency_label.strip()
                     agency, unit = indentify_unit(agency_label, unit_pattern)
                     if collect_agencies:
                         if agency_label not in agencies_dict:
                             # Get the county if it is given
-                            county = row.get('county', None)
+                            county = row.get("county", None)
                             agencies_dict[agency_label] = {
                                 "agency": agency,
                                 "unit": unit,
-                                "county": county
+                                "county": county,
                             }
                 else:
                     agency = None
                     unit = None
 
                 if person_nbr not in officers_dict:
-                    state_id = StateId(
-                        state=state, id_name="NPI ID", value=person_nbr
-                    )
+                    state_id = StateId(state=state, id_name="NPI ID", value=person_nbr)
                     officer_data = {
                         "first_name": get_field(row, schema, "first_name", str.title),
                         "middle_name": get_field(row, schema, "middle_name", str.title),
@@ -272,16 +282,14 @@ def process_csv(
                         "suffix": get_field(row, schema, "suffix", str.upper),
                         "ethnicity": get_field(row, schema, "ethnicity", map_ethnicity),
                         "gender": get_field(row, schema, "gender", map_gender),
-                        "year_of_birth": get_field(row, schema, "year_of_birth", get_int),
+                        "year_of_birth": get_field(
+                            row, schema, "year_of_birth", get_int
+                        ),
                         "state_ids": [state_id],
                     }
-                    employment = extract_employment(
-                        row, employ_schema, unit, agency
-                    )
+                    employment = extract_employment(row, employ_schema, unit, agency)
                     if employment:
-                        employment_history = [
-                            employment
-                        ]
+                        employment_history = [employment]
 
                     try:
                         officer = CreateOfficer(**officer_data)
@@ -301,21 +309,23 @@ def process_csv(
                     officers_dict[person_nbr] = officer_item
                 else:
                     # Handle multiple employment records
-                    employment = extract_employment(
-                        row, employ_schema, unit, agency
-                    )
+                    employment = extract_employment(row, employ_schema, unit, agency)
                     if employment:
                         officers_dict[person_nbr]["employment"].append(employment)
 
                     try:
-                        if row.get("start_date") and officers_dict[person_nbr].get("service_start"):
+                        if row.get("start_date") and officers_dict[person_nbr].get(
+                            "service_start"
+                        ):
                             start_date = convert_str_to_date(row.get("start_date"))
-                            if start_date and officers_dict[person_nbr].get("service_start"):
+                            if start_date and officers_dict[person_nbr].get(
+                                "service_start"
+                            ):
                                 if start_date < convert_str_to_date(
                                     officers_dict[person_nbr]["service_start"]
                                 ):
-                                    officers_dict[person_nbr]["service_start"] = row.get(
-                                        "start_date"
+                                    officers_dict[person_nbr]["service_start"] = (
+                                        row.get("start_date")
                                     )
                     except TypeError as e:
                         logging.error(f"Type error for officer {person_nbr}: {e}")
