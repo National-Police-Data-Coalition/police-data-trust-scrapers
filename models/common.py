@@ -4,7 +4,7 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 
-class Attachemnt(BaseModel):
+class Attachment(BaseModel):
     type: Optional[str] = Field(None, description="The filetype of attachment.")
     url: Optional[str] = Field(None, description="The URL of the attachment.")
     title: Optional[str] = Field(None, description="The title of the attachment.")
