@@ -40,7 +40,7 @@ def convert_str_to_date(date_string):
         return None
 
 
-def validate_and_return_date_str(date_string):
+def validate_date(date_string):
     """
     Validate if a string is in a recognized date format.
     If it is, return the date in YYYY-MM-DD format.
@@ -62,6 +62,7 @@ def validate_and_return_date_str(date_string):
 
     format_code = "%m/%d/%Y %I:%M:%S %p"
     format_code_alt = "%Y-%m-%d"
+    format_code_alt2 = "%m/%d/%Y"
     try:
         date = datetime.strptime(date_string, format_code).date()
         return date.strftime("%Y-%m-%d")
@@ -71,8 +72,13 @@ def validate_and_return_date_str(date_string):
         date = datetime.strptime(date_string, format_code_alt).date()
         return date.strftime("%Y-%m-%d")
     except (ValueError, TypeError):
+        pass
+    try:
+        date = datetime.strptime(date_string, format_code_alt2).date()
+        return date.strftime("%Y-%m-%d")
+    except (ValueError, TypeError):
         logging.warning(f"Invalid date format for {date_string}")
-    return False
+        return False
 
 
 def get_int(value):
@@ -163,13 +169,37 @@ def map_gender(gender):
 
     gender_mapping = {
         "male": Gender.MALE.value,
+        "male/man": Gender.MALE.value,
         "female": Gender.FEMALE.value,
+        "female/woman": Gender.FEMALE.value,
     }
 
     for key, value in gender_mapping.items():
         if key in gender.lower():
             return value
 
+    return None
+
+
+def clean_age_range(age_group):
+    """
+    Clean and standardize age group strings.
+    Examples:
+    - "18-25" -> "18-25"
+    - "29 < Age <= 34" -> "30-34"
+    - "09 < Age <= 14" -> "10-14"
+    - "00 < Age <= 09" -> "00-09"
+
+    """
+    if age_group is None:
+        return None
+
+    age_group = age_group.replace(" ", "")
+    match = re.match(r"(\d{2})<Age<=?(\d{2})", age_group)
+    if match:
+        lower_bound = match.group(1)
+        upper_bound = match.group(2)
+        return f"{lower_bound}-{upper_bound}"
     return None
 
 

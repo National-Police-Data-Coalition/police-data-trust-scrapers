@@ -6,7 +6,7 @@ from datetime import datetime
 
 from models.complaints import CreateComplaint, CreateComplaintSource, CreateLocation
 from scrapers.nycopen.items import SOURCE_REL, SOURCE_UID
-from scrapers.nycopen.utils import validate_and_return_date_str
+from scrapers.nycopen.utils import validate_date
 
 # Set up logging
 log_path = "_nyc_od_complaints.log"
@@ -60,15 +60,9 @@ def process_csv(csv_filename, complaint_output_file):
                     "record_id": record_id,
                     "source_details": rel,
                     "location": loc,
-                    "incident_date": validate_and_return_date_str(
-                        row.get("Incident Date", None)
-                    ),
-                    "received_date": validate_and_return_date_str(
-                        row.get("Received Date", None)
-                    ),
-                    "closed_date": validate_and_return_date_str(
-                        row.get("Close Date", None)
-                    ),
+                    "incident_date": validate_date(row.get("Incident Date", None)),
+                    "received_date": validate_date(row.get("Received Date", None)),
+                    "closed_date": validate_date(row.get("Close Date", None)),
                     "reason_for_contact": row.get("Reason for Police Contact", None),
                     "outcome_of_contact": row.get("Outcome Of Police Encounter", None),
                     # "disposition": row.get("CCRB Complaint Disposition", None),

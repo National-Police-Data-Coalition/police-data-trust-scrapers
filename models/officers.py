@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 
 from models.enums import Ethnicity, Gender
 
-from .common import Article, Attachemnt, PaginatedResponse
+from .common import Article, Attachment, PaginatedResponse
 
 
 class StateId(BaseModel):
@@ -15,6 +15,15 @@ class StateId(BaseModel):
         description="The name of the id. For example, Tax ID, Driver's License, etc.",
     )
     value: Optional[str] = Field(None, description="The value of the id.")
+
+
+class CreateStateId(BaseModel):
+    state: str = Field(..., description="The state of the state id")
+    id_name: str = Field(
+        ...,
+        description="The name of the id. For example, Tax ID, Driver's License, etc.",
+    )
+    value: str = Field(..., min_length=1, description="The value of the id.")
 
 
 class BaseEmployment(BaseModel):
@@ -201,7 +210,7 @@ class CreateOfficer(BaseOfficer, BaseModel):
     articles: Optional[List[Article]] = Field(
         None, description="News articles that reference the officer."
     )
-    attachments: Optional[List[Attachemnt]] = Field(
+    attachments: Optional[List[Attachment]] = Field(
         None, description="Documents and files related to the officer."
     )
 

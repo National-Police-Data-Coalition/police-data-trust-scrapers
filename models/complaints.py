@@ -96,8 +96,11 @@ class CreatePenalty(BaseModel):
         None, description="The agency's disposition."
     )
     penalty: Optional[str] = Field(None, description="A description of the penalty.")
-    date_assessed: Optional[date] = Field(
-        None, description="The date that the penalty was assessed."
+    date_assessed: Optional[str] = Field(
+        None,
+        description="The date that the penalty was assessed.",
+        example="2023-01-01",
+        pattern=r"^\d{4}-\d{2}-\d{2}$",
     )
 
 
