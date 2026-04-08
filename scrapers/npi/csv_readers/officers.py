@@ -6,10 +6,12 @@ from datetime import datetime
 
 import requests
 
-from models.agencies import CreateAgency, CreateUnit
-from models.officers import AddEmployment, CreateOfficer, StateId
+from models.agencies import UpdateAgency, UpdateUnit
+from models.enums import State
+from models.officers import UpdateEmployment, UpdateOfficer, StateId
+from models.dicts import STATE_INFO
 from scrapers.npi.items import SOURCE_UID
-from scrapers.npi.mapping import SCHEMA_MAP
+from scrapers.npi.mapping import SCHEMA_MAP, IL_OFFICER_RANK_MAP, TX_OFFICER_RANK_MAP
 from scrapers.npi.utils import (
     convert_str_to_date,
     get_int,
@@ -31,6 +33,27 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
     filename=log_path,
 )
+
+
+# Resolve state
+def resolve_agency_hq_state(state, county, agency):
+    if state == "TX":
+        if county and county.lower() == "other state than texas":
+            logging.info(f"County indicates out-of-state agency: {agency} in {county}")
+            if agency and agency.lower().startswith("state of"):
+                ref = agency.lower().split("state of")[-1].strip()
+                logging.info(f"Extracted state reference from agency name: '{ref}'")
+                if ref in STATE_INFO:
+                    res = STATE_INFO[ref]["abbrv"]
+                else:
+                    res = None
+            else:
+                res = None
+        else:
+            res = state
+    else:
+        res = state
+    return res
 
 
 # Select the proper place based on the sate and county
@@ -160,7 +183,7 @@ def process_agencies(agency_set, state, enrich_data=True):
         }
 
         try:
-            agency = CreateAgency(**agency_data)
+            agency = UpdateAgency(**agency_data)
         except ValueError as e:
             logging.error(f"Validation error for agency {name}: {e}")
             continue
@@ -177,9 +200,10 @@ def process_agencies(agency_set, state, enrich_data=True):
     for unit in units:
         unit_data = {
             "name": unit["unit"].title(),
+            "hq_state": state
         }
         try:
-            unit_item = CreateUnit(**unit_data)
+            unit_item = UpdateUnit(**unit_data)
         except ValueError as e:
             logging.error(f"Validation error for unit {unit}: {e}")
         agency_items.append(
@@ -187,9 +211,10 @@ def process_agencies(agency_set, state, enrich_data=True):
                 "url": "https://invisible.institute/national-police-index",
                 "model": "unit",
                 "data": unit_item.model_dump(),
+                "agency": unit["agency"].title(),
+                "a_hq_state": state,
                 "scraped_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "source_uid": SOURCE_UID,
-                "agency": unit["agency"].title(),
             }
         )
 
@@ -206,26 +231,52 @@ def get_field(row, schema, field_name, transform=lambda x: x):
     return transform(val) if val else None
 
 
-def extract_employment(row, employ_schema, unit, agency):
+def get_rank_values(row, employ_schema, state):
+    """
+    Return normalized highest_rank and the source-system rank label.
+    """
+    rank_label = get_field(row, employ_schema, "highest_rank", str.strip)
+    if not rank_label:
+        return None, None
+
+    rank_map = None
+    if state == "TX":
+        rank_map = TX_OFFICER_RANK_MAP
+    elif state == "IL":
+        rank_map = IL_OFFICER_RANK_MAP
+
+    if rank_map:
+        highest_rank = rank_map.get(rank_label)
+        if highest_rank:
+            return highest_rank, rank_label
+
+    return rank_label.title(), rank_label
+
+
+def extract_employment(row, employ_schema, unit, agency, hq_state, state):
     """
     Extract employment details from the row based on the employment schema.
     Returns a dictionary with employment details.
     """
+    highest_rank, rank_label = get_rank_values(row, employ_schema, state)
     data = {
         "earliest_date": get_field(row, employ_schema, "earliest_date"),
         "latest_date": get_field(row, employ_schema, "latest_date"),
-        "highest_rank": get_field(row, employ_schema, "highest_rank", str.title),
+        "highest_rank": highest_rank,
+        "rank_label": rank_label,
         "badge_number": get_field(row, employ_schema, "badge_number", str.upper),
         "type": get_field(row, employ_schema, "type", str.title),
-        "employment_change": get_field(
+        "change": get_field(
             row, employ_schema, "employment_change", str.title
         ),
         "status": get_field(row, employ_schema, "status", str.title),
-        "unit_uid": unit.title() if unit else "Unknown",
-        "agency_uid": agency.title() if agency else None,
+        "unit_label": unit.title() if unit else "Unknown",
+        "u_hq_state": hq_state,
+        "agency_label": agency.title() if agency else "Unknown",
+        "a_hq_state": hq_state,
     }
     try:
-        employment = AddEmployment(**data)
+        employment = UpdateEmployment(**data)
     except ValueError as e:
         logging.error(f"Validation error for employment data: {e}")
         return None
@@ -239,6 +290,7 @@ def process_csv(
     agency_output_file=None,
     collect_agencies=False,
 ):
+    state = state.value if isinstance(state, State) else state
     officers_dict = {}
     agencies_dict = {}
     schema = SCHEMA_MAP.get(state, SCHEMA_MAP["default"])
@@ -256,24 +308,33 @@ def process_csv(
                     continue
 
                 # Handle agency and unit data
+                hq_state = state
                 agency_label = get_field(row, employ_schema, "agency_uid", str.lower)
                 if agency_label:
                     agency_label = agency_label.strip()
                     agency, unit = indentify_unit(agency_label, unit_pattern)
+                    # Get the county if it is given
+                    county = row.get("county", None)
+                    # TODO: Handle hq_state
                     if collect_agencies:
                         if agency_label not in agencies_dict:
-                            # Get the county if it is given
-                            county = row.get("county", None)
                             agencies_dict[agency_label] = {
                                 "agency": agency,
                                 "unit": unit,
                                 "county": county,
                             }
+                    elif state == State.TX.value:
+                        hq_state = resolve_agency_hq_state(state, county, agency)
+                        if hq_state != state:
+                            agency = "Unknown"
+                            unit = "Unknown"
                 else:
-                    agency = None
-                    unit = None
+                    agency = "Unknown"
+                    unit = "Unknown"
+                    hq_state = state
 
                 if person_nbr not in officers_dict:
+                    employment_history = []
                     state_id = StateId(state=state, id_name="NPI ID", value=person_nbr)
                     officer_data = {
                         "first_name": get_field(row, schema, "first_name", str.title),
@@ -287,12 +348,13 @@ def process_csv(
                         ),
                         "state_ids": [state_id],
                     }
-                    employment = extract_employment(row, employ_schema, unit, agency)
+                    employment = extract_employment(
+                        row, employ_schema, unit, agency, hq_state, state
+                    )
                     if employment:
-                        employment_history = [employment]
-
+                        employment_history.append(employment)
                     try:
-                        officer = CreateOfficer(**officer_data)
+                        officer = UpdateOfficer(**officer_data)
                     except ValueError as e:
                         logging.error(f"Validation error for officer {person_nbr}: {e}")
                         return None
@@ -309,7 +371,9 @@ def process_csv(
                     officers_dict[person_nbr] = officer_item
                 else:
                     # Handle multiple employment records
-                    employment = extract_employment(row, employ_schema, unit, agency)
+                    employment = extract_employment(
+                        row, employ_schema, unit, agency, hq_state, state
+                    )
                     if employment:
                         officers_dict[person_nbr]["employment"].append(employment)
 
@@ -353,7 +417,9 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--state",
-        default="TX",
+        type=State,
+        choices=list(State),
+        default=State.TX,
         help="State code for the officers (default: TX)",
     )
     parser.add_argument(

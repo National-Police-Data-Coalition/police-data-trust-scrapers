@@ -249,7 +249,7 @@ class ComplaintSpider(scrapy.Spider):
         # Compose the location dictionary
         location_data = {
             "location_type": details.pop("location_type", ""),
-            "responsibility_type": "precinct",  # Always 'precinct' for NYPD
+            "administrative_area_type": "precinct",  # Always 'precinct' for NYPD
             "location_description": "{}, {}".format(
                 details.pop("precinct", ""), details.pop("borough", "")
             ).strip(", "),

@@ -5,91 +5,34 @@ from pydantic import BaseModel, Field
 from .common import PaginatedResponse
 
 
-class BaseAgency(BaseModel):
-    name: Optional[str] = Field(None, description="Name of the agency")
+
+class UpdateAgency(BaseModel):
+    name: str = Field(..., description="Name of the agency")
+    hq_state: str = Field(..., description="State of the agency")
     hq_address: Optional[str] = Field(None, description="Address of the agency")
     hq_city: Optional[str] = Field(None, description="City of the agency")
-    hq_state: Optional[str] = Field(None, description="State of the agency")
     hq_zip: Optional[str] = Field(None, description="Zip code of the agency")
-    jurisdiction: Optional[str] = Field(None, description="Jurisdiction of the agency")
     phone: Optional[str] = Field(None, description="Phone number of the agency")
     email: Optional[str] = Field(None, description="Email of the agency")
     website_url: Optional[str] = Field(None, description="Website of the agency")
-
-
-class CreateAgency(BaseAgency, BaseModel):
-    name: Optional[str] = Field(None, description="Name of the agency")
-    hq_address: Optional[str] = Field(None, description="Address of the agency")
-    hq_city: Optional[str] = Field(None, description="City of the agency")
-    hq_state: Optional[str] = Field(None, description="State of the agency")
-    hq_zip: Optional[str] = Field(None, description="Zip code of the agency")
-    jurisdiction: Optional[str] = Field(None, description="Jurisdiction of the agency")
-    phone: Optional[str] = Field(None, description="Phone number of the agency")
-    email: Optional[str] = Field(None, description="Email of the agency")
-    website_url: Optional[str] = Field(None, description="Website of the agency")
-
-
-class UpdateAgency(BaseAgency, BaseModel):
-    name: Optional[str] = Field(None, description="Name of the agency")
-    hq_address: Optional[str] = Field(None, description="Address of the agency")
-    hq_city: Optional[str] = Field(None, description="City of the agency")
-    hq_state: Optional[str] = Field(None, description="State of the agency")
-    hq_zip: Optional[str] = Field(None, description="Zip code of the agency")
-    jurisdiction: Optional[str] = Field(None, description="Jurisdiction of the agency")
-    phone: Optional[str] = Field(None, description="Phone number of the agency")
-    email: Optional[str] = Field(None, description="Email of the agency")
-    website_url: Optional[str] = Field(None, description="Website of the agency")
-
-
-class Agency(BaseAgency, BaseModel):
-    name: Optional[str] = Field(None, description="Name of the agency")
-    hq_address: Optional[str] = Field(None, description="Address of the agency")
-    hq_city: Optional[str] = Field(None, description="City of the agency")
-    hq_state: Optional[str] = Field(None, description="State of the agency")
-    hq_zip: Optional[str] = Field(None, description="Zip code of the agency")
-    jurisdiction: Optional[str] = Field(None, description="Jurisdiction of the agency")
-    phone: Optional[str] = Field(None, description="Phone number of the agency")
-    email: Optional[str] = Field(None, description="Email of the agency")
-    website_url: Optional[str] = Field(None, description="Website of the agency")
-    uid: Optional[str] = Field(None, description="Unique identifier for the agency")
-    officers_url: Optional[str] = Field(
-        None, description="URL to get a list of officers for this agency"
-    )
-    units_url: Optional[str] = Field(
-        None, description="URL to get a list of units for this agency"
-    )
-
-
-class AgencyList(PaginatedResponse, BaseModel):
-    results: Optional[List[Agency]] = None
-
-
-class BaseUnit(BaseModel):
-    """Base properties for a unit"""
-
-    name: Optional[str] = Field(None, description="Name of the unit")
-    website_url: Optional[str] = Field(None, description="Website of the unit")
-    phone: Optional[str] = Field(None, description="Phone number of the unit")
-    email: Optional[str] = Field(None, description="Email of the unit")
-    description: Optional[str] = Field(None, description="Description of the unit")
-    address: Optional[str] = Field(None, description="Street address of the unit")
-    zip: Optional[str] = Field(None, description="Zip code of the unit")
+    description: Optional[str] = Field(None, description="Description of the agency")
     date_established: Optional[str] = Field(
-        None,
-        description="The date that this unit was established by its parent agency.",
+        None, description="The date that this agency was established."
     )
+    jurisdiction: Optional[str] = Field(None, description="Jurisdiction of the agency")
 
 
-class CreateUnit(BaseUnit, BaseModel):
+class UpdateUnit(BaseModel):
     name: str = Field(..., description="Name of the unit")
-    website_url: Optional[str] = Field(None, description="Website of the unit")
+    hq_state: str = Field(..., description="State where the unit is headquartered.")
+    hq_address: Optional[str] = Field(None, description="Street address where the unit is headquartered.")
+    hq_city: Optional[str] = Field(None, description="City where the unit is headquartered.")
+    hq_zip: Optional[str] = Field(None, description="Zip code where the unit is headquartered.")
     phone: Optional[str] = Field(None, description="Phone number of the unit")
     email: Optional[str] = Field(None, description="Email of the unit")
+    website_url: Optional[str] = Field(None, description="Website of the unit")
     description: Optional[str] = Field(None, description="Description of the unit")
-    address: Optional[str] = Field(None, description="Street address of the unit")
-    city: Optional[str] = Field(None, description="City of the unit's HQ")
-    zip: Optional[str] = Field(None, description="Zip code of the unit's HQ")
-    state: Optional[str] = Field(None, description="State of the unit's HQ")
+    status: Optional[str] = Field(None, description="Opertional status of the unit")
     date_established: Optional[str] = Field(
         None,
         description="The date that this unit was established by its parent agency.",
@@ -97,52 +40,6 @@ class CreateUnit(BaseUnit, BaseModel):
     commander_uid: Optional[str] = Field(
         None, description="The UID of the unit's current commander."
     )
-
-
-class UpdateUnit(BaseUnit, BaseModel):
-    name: Optional[str] = Field(None, description="Name of the unit")
-    website_url: Optional[str] = Field(None, description="Website of the unit")
-    phone: Optional[str] = Field(None, description="Phone number of the unit")
-    email: Optional[str] = Field(None, description="Email of the unit")
-    description: Optional[str] = Field(None, description="Description of the unit")
-    address: Optional[str] = Field(None, description="Street address of the unit")
-    zip: Optional[str] = Field(None, description="Zip code of the unit")
-    date_established: Optional[str] = Field(
-        None,
-        description="The date that this unit was established by its parent agency.",
-    )
-    commander_uid: Optional[str] = Field(
-        None, description="The UID of the unit's current commander."
-    )
-
-
-class Unit(BaseUnit, BaseModel):
-    name: Optional[str] = Field(None, description="Name of the unit")
-    website_url: Optional[str] = Field(None, description="Website of the unit")
-    phone: Optional[str] = Field(None, description="Phone number of the unit")
-    email: Optional[str] = Field(None, description="Email of the unit")
-    description: Optional[str] = Field(None, description="Description of the unit")
-    address: Optional[str] = Field(None, description="Street address of the unit")
-    zip: Optional[str] = Field(None, description="Zip code of the unit")
-    date_established: Optional[str] = Field(
-        None,
-        description="The date that this unit was established by its parent agency.",
-    )
-    uid: Optional[str] = Field(None, description="Unique identifier for the unit")
-    commander_history_url: Optional[str] = Field(
-        None,
-        description="-| URL that returns the past commanders of the unit and the period of their respective commands.",
-    )
-    agency_url: Optional[str] = Field(
-        None, description="URL to get the agency that this unit belongs to."
-    )
-    officers_url: Optional[str] = Field(
-        None, description="URL to get a list of officers for this unit."
-    )
-
-
-class UnitList(PaginatedResponse, BaseModel):
-    results: Optional[List[Unit]] = None
 
 
 class AddOfficer(BaseModel):

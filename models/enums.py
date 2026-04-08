@@ -83,3 +83,47 @@ class State(str, Enum):
     PR = "PR"
     VI = "VI"
     GU = "GU"
+
+
+class Rank(str, Enum):
+    NON_SWORN = "Non-Sworn"
+    POLICE_OFFICER = "Police Officer"
+    DETECTIVE = "Detective"
+    SERGEANT = "Sergeant"
+    LIEUTENANT = "Lieutenant"
+    CAPTAIN = "Captain"
+    MAJOR = "Major"
+    COLONEL = "Colonel"
+    COMMANDER = "Commander"
+    CHIEF = "Chief"
+
+    def get_value(self):
+        if self == Rank.NON_SWORN:
+            return 5
+        elif self == Rank.POLICE_OFFICER:
+            return 10
+        elif self == Rank.DETECTIVE:
+            return 20
+        elif self == Rank.SERGEANT:
+            return 30
+        elif self == Rank.LIEUTENANT:
+            return 40
+        elif self == Rank.CAPTAIN:
+            return 50
+        elif self == Rank.MAJOR:
+            return 60
+        elif self == Rank.COLONEL:
+            return 70
+        elif self == Rank.COMMANDER:
+            return 80
+        elif self == Rank.CHIEF:
+            return 90
+        return 0
+
+
+class EmploymentStatus(str, Enum):
+    ACTIVE = "Active"
+    INACTIVE = "Inactive"
+    SUSPENDED = "Suspended"
+    RETIRED = "Retired"
+    TERMINATED = "Terminated"
