@@ -78,6 +78,29 @@ class CreateAllegation(BaseModel):
     )
 
 
+class UpdateAllegation(BaseModel):
+    record_id: str = Field(
+        ...,
+        description="The ID that was given to this allegation by the "
+        "original source of the data.",
+    )
+    allegation: Optional[str] = Field(
+        None, description="The allegation made by the complainant."
+    )
+    type: Optional[str] = Field(None, description="The type of allegation.")
+    subtype: Optional[str] = Field(None, description="The sub type of the allegation.")
+    recommended_finding: Optional[str] = Field(
+        None, description="The finding recommended by the review board."
+    )
+    recommended_outcome: Optional[str] = Field(
+        None, description="The outcome recommended by the review board."
+    )
+    finding: Optional[str] = Field(None, description="The legal finding.")
+    outcome: Optional[str] = Field(
+        None, description="The final outcome of the allegation."
+    )
+
+
 class CreatePenalty(BaseModel):
     officer_uid: str = Field(
         None, description="The UID of the officer the penalty is associated with."

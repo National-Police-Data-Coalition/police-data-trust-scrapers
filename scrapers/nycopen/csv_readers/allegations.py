@@ -4,7 +4,7 @@ import json
 import logging
 from datetime import datetime
 
-from models.complaints import CreateAllegation, CreateCivilian
+from models.complaints import UpdateAllegation, CreateCivilian
 from models.officers import CreateStateId
 from scrapers.nycopen.items import SOURCE_UID
 from scrapers.nycopen.utils import clean_age_range, map_ethnicity, map_gender
@@ -69,8 +69,7 @@ def process_csv(csv_filename, allegations_output_file):
                     civ = None
 
                 allegation_data = {
-                    "accused_uid": "state_id",
-                    "complainant": civ,
+                    "record_id": record_id,
                     "allegation": row.get("Allegation", None),
                     "type": row.get("FADO Type", None),
                     "recommended_finding": row.get(
@@ -84,7 +83,7 @@ def process_csv(csv_filename, allegations_output_file):
                 }
 
                 try:
-                    allegation = CreateAllegation(**allegation_data)
+                    allegation = UpdateAllegation(**allegation_data)
                 except ValueError as e:
                     logging.error(f"Validation error for allegation {record_id}: {e}")
                     return None
@@ -95,6 +94,7 @@ def process_csv(csv_filename, allegations_output_file):
                     "data": allegation.model_dump(),
                     "complaint_id": complaint_id,
                     "officer_state_id": state_id.model_dump(),
+                    "complainant": civ.model_dump() if civ else None,
                     "scraped_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "source_uid": SOURCE_UID,
                 }
