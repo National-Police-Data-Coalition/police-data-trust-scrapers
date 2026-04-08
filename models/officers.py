@@ -47,6 +47,10 @@ class BaseEmployment(BaseModel):
         None,
         description="The highest rank the officer has held during this employment.",
     )
+    rank_label: Optional[str] = Field(
+        None,
+        description="The original rank label as provided by the source system.",
+    )
     commander: Optional[bool] = Field(
         None,
         description="Indicates that the officer commanded the unit during this employment.",
@@ -92,6 +96,10 @@ class UpdateEmployment(BaseModel):
     highest_rank: Optional[str] = Field(
         None,
         description="The highest rank the officer has held during this employment.",
+    )
+    rank_label: Optional[str] = Field(
+        None,
+        description="The original rank label as provided by the source system.",
     )
     commander: Optional[bool] = Field(
         None,
@@ -150,6 +158,10 @@ class Employment(BaseEmployment, BaseModel):
         None,
         description="The highest rank the officer has held during this employment.",
     )
+    rank_label: Optional[str] = Field(
+        None,
+        description="The original rank label as provided by the source system.",
+    )
     commander: Optional[bool] = Field(
         None,
         description="Indicates that the officer commanded the unit during this employment.",
@@ -195,6 +207,10 @@ class UpdateEmployment(BaseModel):
     highest_rank: Optional[str] = Field(
         None,
         description="The highest rank the officer has held during this employment.",
+    )
+    rank_label: Optional[str] = Field(
+        None,
+        description="The original rank label as provided by the source system.",
     )
     type: Optional[str] = Field(
         None,

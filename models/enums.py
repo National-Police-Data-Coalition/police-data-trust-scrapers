@@ -86,6 +86,7 @@ class State(str, Enum):
 
 
 class Rank(str, Enum):
+    NON_SWORN = "Non-Sworn"
     POLICE_OFFICER = "Police Officer"
     DETECTIVE = "Detective"
     SERGEANT = "Sergeant"
@@ -97,7 +98,9 @@ class Rank(str, Enum):
     CHIEF = "Chief"
 
     def get_value(self):
-        if self == Rank.POLICE_OFFICER:
+        if self == Rank.NON_SWORN:
+            return 5
+        elif self == Rank.POLICE_OFFICER:
             return 10
         elif self == Rank.DETECTIVE:
             return 20
